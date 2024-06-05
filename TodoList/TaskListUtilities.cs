@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualBasic;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,33 +15,22 @@ namespace TodoList
     public class TaskListUtilities
     {
 
-        public readonly string DataFilePath = @"..\..\..\json.data";
 
+        public TaskRepository taskRepository { get; set; }
 
+        //public List<Project> Projects { get; set; }
 
-        public TaskListUtilities()
+        public TaskListUtilities(TaskRepository tr)
         {
+            //Projects = new List<Project>();
+
+            taskRepository = tr;
         }
-
-
-        public void SaveDataToFile(List<ProjectTask> tasks)
-        {
-     
-            string json = JsonSerializer.Serialize(tasks);
-            File.WriteAllText(DataFilePath, json);
-        }
-
-        public List<ProjectTask> ReadDataFromFile()
-        {
-            List<ProjectTask> item = JsonFileReader.Read<List<ProjectTask>>(DataFilePath);
-            return item;
-        }
-
 
 
          public string ReadDataFromUser(string userAction)
          {
-            Console.Write(userAction + ": "); //exempel  userAction = "Enter a Category"
+            Console.Write(userAction + ": ");    //exempel  userAction = "Enter a Category"
             string? data = Console.ReadLine();
 
             if (data != null)
@@ -72,6 +62,7 @@ namespace TodoList
          }
 
 
+        
            
           public void SuccessMessage()
           {
@@ -84,13 +75,13 @@ namespace TodoList
 
           public void AddTask(List<ProjectTask> tasks)
           {
-              ReadAllDataForTask(tasks);
+              ReadAllDataForAddTask(tasks);
           }
 
 
           // Reads user input for a task: title, projectname, duedate
           // status will be set to 'started'
-          public void ReadAllDataForTask(List<ProjectTask> tasks)
+          public void ReadAllDataForAddTask(List<ProjectTask> tasks)
           {
 
                 string dataTitle = "";
@@ -103,7 +94,7 @@ namespace TodoList
                 {
                     bool dataTitleOk = false;
 
-         
+                    Console.WriteLine();
                     Console.WriteLine("Write q to quit");
 
                     while (!dataTitleOk)
@@ -156,10 +147,14 @@ namespace TodoList
                     tasks.Add(t);
 
                     //write to file
-                    SaveDataToFile(tasks);
+                    //
+
+                    //SaveDataToFile(tasks);   // "AutoSave" when change of Task-List is made
+
+                    taskRepository.SaveTasksToFile(tasks);
 
                     SuccessMessage();
-                }
+               }
           }
 
           
@@ -183,8 +178,6 @@ namespace TodoList
 
 
           
-
-
           // Sort by ascending Title
           public List<ProjectTask> DefaultSort(List<ProjectTask> tasks)
           {
@@ -209,14 +202,21 @@ namespace TodoList
               return str;
           }
 
+          public void ListHeader()
+          {
+              Console.WriteLine("Task".PadRight(15) + "Project".PadRight(15) + "Status".ToString().PadRight(12)+ "DueDate".ToString());
+              Console.WriteLine("----".PadRight(15) + "-------".PadRight(15) + "------".ToString().PadRight(12) + "-------".ToString());
+          }
 
           public void PrintAllTasks(List<ProjectTask> tasks, string search = "")
           {
-                  //    //double sum = prods.Sum(item => item.Price);
+      
               var defaultSorted = DefaultSort(tasks);   // default sort.ThenBy(item => item.ProductName).ToList();
 
               bool srch = (search != "") ? true : false;
               bool found = false;
+
+              ListHeader();
 
               if (srch)
               {
@@ -233,15 +233,10 @@ namespace TodoList
                   {
                        found = false;
                   }
-              }
+              }         
 
-              Console.WriteLine("");
-
-              // ListHeader();
-            
-
-            if (srch && found)
-            {
+              if (srch && found)
+              {
 
                 //foreach (var prod in defaultSorted)
                 //{
@@ -257,9 +252,9 @@ namespace TodoList
                 //        Console.WriteLine(prod.Category.PadRight(20) + prod.ProductName.PadRight(20) + prod.Price);
                 //    }
                 //}
-            }
-            else if (srch && !found)
-            {
+              }
+              else if (srch && !found)
+              {
                 //Console.WriteLine("The Item was not found");
 
                 //foreach (var prod in defaultSorted) // Show List
@@ -267,16 +262,18 @@ namespace TodoList
                 //    Console.WriteLine(prod.Category.PadRight(20) + prod.ProductName.PadRight(20) + prod.Price);
                 //}
 
-            }
-            else   // normal-display of List without search
-            {
-                foreach (var task in defaultSorted) // Show List
-                {
-                    Console.WriteLine(task.TaskTitle.PadRight(20) + task.ProjectName.PadRight(20) + task.Status.ToString());
-                }
-            }
-            Console.WriteLine();
-            Console.WriteLine("---------------------------------------------");
+              }
+              else   // normal-display of List  (without search)
+              {
+
+                  foreach (var task in defaultSorted) // Show List
+                  {
+                      string dt = task.DueDate.ToString("yyyy-MM-dd");
+                      Console.WriteLine(task.TaskTitle.PadRight(15) + task.ProjectName.PadRight(15) + task.Status.ToString().PadRight(12)+ dt);
+                  }
+              }
+              Console.WriteLine();
+              Console.WriteLine("---------------------------------------------");
         }
     }
     public class JsonFileReader

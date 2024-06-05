@@ -5,21 +5,31 @@ using TodoList;
 void Main()
 {
 
-    TaskListUtilities tu = new TaskListUtilities();
+    TaskRepository tr = new TaskRepository();
+    TaskListUtilities tu = new TaskListUtilities(tr);
 
     List<ProjectTask> tasks;
 
-    if (File.Exists(tu.DataFilePath))   // json.data exists
+
+    if (File.Exists(tr.DataFilePath))   // TaskJson.data exists
     {
-        tasks = tu.ReadDataFromFile();  // Read all values and assign
+        try
+        {
+            tasks = tr.ReadTasksFromFile();  // Load values
+        }
+        catch (Exception e)
+        {
+            tasks = null;
+            Console.WriteLine("An error has ocurred while reading data from file: " + e.Message);
+            Environment.Exit(0);
+        }
     }
     else
     {
-        tasks = new List<ProjectTask>();   // json.data does not exist yet
+        tasks = new List<ProjectTask>();   // TaskJson.data does not exist yet
     }
 
     tu.WriteHeader();
-    tu.WriteMenu();
 
     string choice = "";
     
@@ -28,9 +38,10 @@ void Main()
         tu.WriteMenu();
         choice = Console.ReadLine();
         if (choice.Trim().ToLower() == "1")
-        {
+        {   
 
             tu.PrintAllTasks(tasks);
+        
         }
         else if (choice.Trim().ToLower() == "2")    // 2 - Add new Task
         {
@@ -40,13 +51,11 @@ void Main()
         }
         else if (choice.Trim().ToLower() == "3")     // 3 - Edit Task (update, mark as done, remove)
         {
-            tu.ReadDataFromFile();
             
-            //Console.WriteLine("3");
         }
         else if (choice.Trim().ToLower() == "4")     // 4 = Save and Quit
         {
-            tu.SaveDataToFile(tasks);
+            tr.SaveTasksToFile(tasks);
 
             break;
         }

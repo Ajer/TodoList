@@ -15,7 +15,7 @@ namespace TodoList
         public ProjectTask(string taskTitle, string projectName,TaskStatus status, DateTime dueDate)
         {
             TaskTitle = taskTitle;
-            ProjectName = projectName;
+            ProjectName = projectName;     // projectName
             Status = status;
             DueDate = dueDate;
         }
