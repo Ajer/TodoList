@@ -142,18 +142,17 @@ namespace TodoList
 
                     DateTime dueDt = Convert.ToDateTime(dataDueDate);
 
-                    ProjectTask t = new ProjectTask(dataTitle,dataProjName,TaskStatus.NotStarted,dueDt);
+                    Project project = new Project(dataProjName);
+
+                    ProjectTask t = new ProjectTask(dataTitle,project,TaskStatus.NotStarted,dueDt);
 
                     tasks.Add(t);
 
                     //write to file
-                    //
+     
+                    taskRepository.SaveTasksToFile(tasks); // "AutoSave" when change of Task-List is made
 
-                    //SaveDataToFile(tasks);   // "AutoSave" when change of Task-List is made
-
-                    taskRepository.SaveTasksToFile(tasks);
-
-                    SuccessMessage();
+                SuccessMessage();
                }
           }
 
@@ -269,7 +268,7 @@ namespace TodoList
                   foreach (var task in defaultSorted) // Show List
                   {
                       string dt = task.DueDate.ToString("yyyy-MM-dd");
-                      Console.WriteLine(task.TaskTitle.PadRight(15) + task.ProjectName.PadRight(15) + task.Status.ToString().PadRight(12)+ dt);
+                      Console.WriteLine(task.TaskTitle.PadRight(15) + task.Project.Name.PadRight(15) + task.Status.ToString().PadRight(12)+ dt);
                   }
               }
               Console.WriteLine();

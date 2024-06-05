@@ -12,17 +12,17 @@ namespace TodoList
         {         
         }
 
-        public ProjectTask(string taskTitle, string projectName,TaskStatus status, DateTime dueDate)
+        public ProjectTask(string taskTitle, Project project,TaskStatus status, DateTime dueDate)
         {
             TaskTitle = taskTitle;
-            ProjectName = projectName;     // projectName
+            Project = project;     // projectName
             Status = status;
             DueDate = dueDate;
         }
 
         public string TaskTitle { get; set; }
 
-        public string ProjectName { get; set; }
+        public Project Project { get; set; }
 
         public TaskStatus Status { get; set; }
 
