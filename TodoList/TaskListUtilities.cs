@@ -73,15 +73,15 @@ namespace TodoList
           }
 
 
-          public void AddTask(List<ProjectTask> tasks)
+          public void AddTask(List<ProjectTask> tasks,ref int index)
           {
-              ReadAllDataForAddTask(tasks);
+              ReadAllDataForAddTask(tasks,ref index);
           }
 
 
           // Reads user input for a task: title, projectname, duedate
           // status will be set to 'started'
-          public void ReadAllDataForAddTask(List<ProjectTask> tasks)
+          public void ReadAllDataForAddTask(List<ProjectTask> tasks,ref int index)
           {
 
                 string dataTitle = "";
@@ -268,7 +268,9 @@ namespace TodoList
                   foreach (var task in defaultSorted) // Show List
                   {
                       string dt = task.DueDate.ToString("yyyy-MM-dd");
-                      Console.WriteLine(task.TaskTitle.PadRight(15) + task.Project.Name.PadRight(15) + task.Status.ToString().PadRight(12)+ dt);
+                      string status = (task.Status == TaskStatus.NotStarted) ? "Not Started" : task.Status.ToString();
+
+                      Console.WriteLine(task.TaskTitle.PadRight(15) + task.Project.Name.PadRight(15) + status.PadRight(12)+ dt);
                   }
               }
               Console.WriteLine();

@@ -10,6 +10,7 @@ void Main()
 
     List<ProjectTask> tasks;
 
+    int maxIndex = 0;
 
     if (File.Exists(tr.DataFilePath))   // TaskJson.data exists
     {
@@ -46,7 +47,7 @@ void Main()
         else if (choice.Trim().ToLower() == "2")    // 2 - Add new Task
         {
           
-            tu.AddTask(tasks);
+            tu.AddTask(tasks, ref maxIndex);
             
         }
         else if (choice.Trim().ToLower() == "3")     // 3 - Edit Task (update, mark as done, remove)
