@@ -37,21 +37,28 @@ void Main()
 
     string choice = "";
     
-    while(true)   //while (choice.Trim().ToLower() != "q")
+    while(true)
     {
         tu.WriteMenu();
         choice = Console.ReadLine();
-        if (choice.Trim().ToLower() == "1")
-        {   
 
-            tu.PrintAllTasks(tasks);
-        
+        if (choice.Trim().ToLower() == "1")       // 1 - Show List by Sort
+        {
+            string sort = tu.UserSortsList();
+            if (sort!="q")
+            {
+                tu.PrintAllTasks(tasks,sort);
+            }
+              
+            //Console.WriteLine();
+                    
         }
         else if (choice.Trim().ToLower() == "2")    // 2 - Add new Task
         {
           
             tu.AddTask(tasks, ref maxIndex);
-            
+            //Console.WriteLine();
+
         }
         else if (choice.Trim().ToLower() == "3")     // 3 - Edit Task (update, mark as done, remove)
         {

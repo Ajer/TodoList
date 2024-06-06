@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -15,17 +16,20 @@ namespace TodoList
     public class TaskListUtilities
     {
 
+         public TaskRepository taskRepository { get; set; }
 
-        public TaskRepository taskRepository { get; set; }
 
-        //public List<Project> Projects { get; set; }
 
-        public TaskListUtilities(TaskRepository tr)
-        {
-            //Projects = new List<Project>();
+         //public List<Project> Projects { get; set; }
 
-            taskRepository = tr;
-        }
+
+
+         public TaskListUtilities(TaskRepository tr)
+         {
+              //Projects = new List<Project>();
+
+              taskRepository = tr;
+         }
 
 
          public string ReadDataFromUser(string userAction)
@@ -49,12 +53,14 @@ namespace TodoList
 
          public void WriteHeader()
          {
+            Console.WriteLine();
             Console.WriteLine("Welcome to Todoly you have X tasks todo and Y tasks are done.");
             Console.WriteLine("Pick an option:");
         }
 
          public void WriteMenu()
          {
+             Console.WriteLine();
              Console.WriteLine("(1) Show task List (by date or project)");
              Console.WriteLine("(2) Add New Task");
              Console.WriteLine("(3) Edit Task (update, mark as done, remove)");
@@ -62,8 +68,7 @@ namespace TodoList
          }
 
 
-        
-           
+                
           public void SuccessMessage()
           {
               Console.ForegroundColor = ConsoleColor.Green;
@@ -144,7 +149,7 @@ namespace TodoList
 
                     Project project = new Project(dataProjName);
 
-                    mIndex = mIndex + 1;
+                    mIndex = mIndex + 1;  // create new Id for task
                     ProjectTask t = new ProjectTask(mIndex,dataTitle,project,TaskStatus.NotStarted,dueDt);
 
                     tasks.Add(t);
@@ -153,14 +158,37 @@ namespace TodoList
      
                     taskRepository.SaveTasksToFile(tasks); // "AutoSave" when change of Task-List is made
 
-                SuccessMessage();
+                    SuccessMessage();
                }
           }
 
+
+        public string UserSortsList()
+        {
+            string dataSort = "";
+            bool dataSortOk = false;
+
+            Console.WriteLine();
+            Console.WriteLine("Write q to quit");
+
+            while (!dataSortOk)
+            {
+                dataSort = ReadDataFromUser("Write 'd' to show Tasks by Date ,'p' to show them by Project and " +
+                    "'t' to show them by title");
+                dataSort = dataSort.Trim().ToLower();
+
+                if (dataSort == "d" || dataSort == "p" || dataSort == "t" || dataSort == "q")
+                {
+                    dataSortOk = true;
+                }
+            }
+            return dataSort;
+        }
+
+
+
+                 
           
-
-
-
           // Checks if a datetime-string of format "yyyy-MM-dd" is a valid date
           public bool ValidateDate(string str)
           {
@@ -177,12 +205,44 @@ namespace TodoList
           }
 
 
+         
+
           
           // Sort by ascending Title
-          public List<ProjectTask> DefaultSort(List<ProjectTask> tasks)
+          public List<ProjectTask> TitleSort(List<ProjectTask> tasks)
           {
                 return tasks.OrderBy(item => item.TaskTitle).ToList();
           }
+
+          // Sort by ascending ProjectName
+          public List<ProjectTask> ProjectSort(List<ProjectTask> tasks)
+          {
+             return tasks.OrderBy(item => item.Project.Name).ToList();
+          }
+
+          // Sort by ascending ProjectName
+          public List<ProjectTask> DateSort(List<ProjectTask> tasks)
+          {
+              return tasks.OrderBy(item => item.DueDate).ToList();
+          }
+
+
+          public List<ProjectTask> GetSortedTasks(List<ProjectTask> tasks, string sort)
+          { 
+             if (sort=="p")
+             {
+                  return ProjectSort(tasks);
+             }
+             else if (sort=="d")
+             {
+                return DateSort(tasks);
+             }
+             else                  //   sort=="t"
+             {
+                return TitleSort(tasks);
+             }
+          }
+          
 
 
           public string ReadSearchTask()
@@ -202,16 +262,21 @@ namespace TodoList
               return str;
           }
 
+
+
           public void ListHeader()
           {
+              Console.WriteLine();
               Console.WriteLine("Id".PadRight(7) + "Task".PadRight(15) + "Project".PadRight(15) + "Status".ToString().PadRight(12)+ "DueDate".ToString());
               Console.WriteLine("---".PadRight(7) + "----".PadRight(15) + "-------".PadRight(15) + "------".ToString().PadRight(12) + "-------".ToString());
           }
 
-          public void PrintAllTasks(List<ProjectTask> tasks, string search = "")
+
+
+          public void PrintAllTasks(List<ProjectTask> tasks, string sort, string search = "")
           {
       
-              var defaultSorted = DefaultSort(tasks);   // default sort.ThenBy(item => item.ProductName).ToList();
+              List<ProjectTask> sorted = GetSortedTasks(tasks,sort);   
 
               bool srch = (search != "") ? true : false;
               bool found = false;
@@ -224,7 +289,7 @@ namespace TodoList
                   //FirstOrDefault() returns the default value of the Data Type used if nothing is found,
                   //in case of Reference type like classes or objects it is NULL.
 
-                  ProjectTask? searchP = defaultSorted.FirstOrDefault(item => item.TaskTitle.ToLower().Equals(search));
+                  ProjectTask? searchP = sorted.FirstOrDefault(item => item.TaskTitle.ToLower().Equals(search));
                   if (searchP != null)     // searched for task found
                   {
                        found = true;
@@ -266,7 +331,7 @@ namespace TodoList
               else   // normal-display of List  (without search)
               {
 
-                  foreach (var task in defaultSorted) // Show List
+                  foreach (var task in sorted) // Show List
                   {
                       string dt = task.DueDate.ToString("yyyy-MM-dd");
                       string status = (task.Status == TaskStatus.NotStarted) ? "Not Started" : task.Status.ToString();
