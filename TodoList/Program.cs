@@ -10,7 +10,6 @@ void Main()
 
     List<ProjectTask> tasks;
 
-    int maxIndex = 0;
 
     if (File.Exists(tr.DataFilePath))   // TaskJson.data exists
     {
@@ -29,6 +28,10 @@ void Main()
     {
         tasks = new List<ProjectTask>();   // TaskJson.data does not exist yet
     }
+
+
+    int maxIndex = tr.GetMaxIndex(tasks);
+
 
     tu.WriteHeader();
 
