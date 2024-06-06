@@ -29,6 +29,15 @@ void Main()
         tasks = new List<ProjectTask>();   // TaskJson.data does not exist yet
     }
 
+    
+    //  int index = tasks.FindIndex(item => item.Id == 2);  // index kan påvisa existens av objektet
+    //  if (index != -1)
+    //  {
+    //    ProjectTask pT = tasks.Find(item => item.Id == 2);
+    //    pT.Project.Name = "Proj999";
+    //  }
+
+
 
     int maxIndex = tr.GetMaxIndex(tasks);
 
