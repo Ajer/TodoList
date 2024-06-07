@@ -6,7 +6,7 @@ void Main()
 {
 
     TaskRepository tr = new TaskRepository();
-    TaskListUtilities tu = new TaskListUtilities(tr);
+   
 
     List<ProjectTask> tasks;
 
@@ -29,7 +29,7 @@ void Main()
         tasks = new List<ProjectTask>();   // TaskJson.data does not exist yet
     }
 
-    
+
     //  int index = tasks.FindIndex(item => item.Id == 2);  // index kan påvisa existens av objektet
     //  if (index != -1)
     //  {
@@ -38,8 +38,9 @@ void Main()
     //  }
 
 
+    int maxId = tr.GetMaxId(tasks);
 
-    int maxIndex = tr.GetMaxIndex(tasks);
+    TaskListUtilities tu = new TaskListUtilities(tr);
 
 
     tu.WriteHeader();
@@ -65,13 +66,15 @@ void Main()
         else if (choice.Trim().ToLower() == "2")    // 2 - Add new Task
         {
           
-            tu.AddTask(tasks, ref maxIndex);
+            tu.AddTask(tasks, ref maxId);
             //Console.WriteLine();
 
         }
         else if (choice.Trim().ToLower() == "3")     // 3 - Edit Task (update, mark as done, remove)
         {
-            
+            tu.PrintAllTasks(tasks, "p");
+            tu.ChangeList(tasks,ref maxId);
+
         }
         else if (choice.Trim().ToLower() == "4")     // 4 = Save and Quit
         {

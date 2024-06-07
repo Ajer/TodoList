@@ -12,12 +12,12 @@ namespace TodoList
         public readonly string DataFilePath = @"..\..\..\TaskJson.data";
 
 
-        public int GetMaxIndex(List<ProjectTask> tasks)
+        public int GetMaxId(List<ProjectTask> tasks)
         {
             if (tasks.Count > 0)
             {
-                int ind = tasks.Max(item => item.Id);
-                return ind;
+                int mId = tasks.Max(item => item.Id);
+                return mId;
             }
             return 0;
         }
@@ -30,7 +30,8 @@ namespace TodoList
         }
 
         public List<ProjectTask> ReadTasksFromFile()
-        { 
+        {
+            //JsonFileReader js = new JsonFileReader();
             List<ProjectTask> item = JsonFileReader.Read<List<ProjectTask>>(DataFilePath);
             return item;
         }
