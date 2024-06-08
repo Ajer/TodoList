@@ -30,6 +30,8 @@ void Main()
     }
 
 
+    TaskListUtilities tu = new TaskListUtilities(tr);
+
     //  int index = tasks.FindIndex(item => item.Id == 2);  // index kan påvisa existens av objektet
     //  if (index != -1)
     //  {
@@ -40,7 +42,7 @@ void Main()
 
     int maxId = tr.GetMaxId(tasks);
 
-    TaskListUtilities tu = new TaskListUtilities(tr);
+    
 
 
     tu.WriteHeader();
@@ -58,16 +60,12 @@ void Main()
             if (sort!="q")
             {
                 tu.PrintAllTasks(tasks,sort);
-            }
-              
-            //Console.WriteLine();
-                    
+            }            
         }
         else if (choice.Trim().ToLower() == "2")    // 2 - Add new Task
-        {
-          
-            tu.AddTask(tasks, ref maxId);
-            //Console.WriteLine();
+        {          
+
+            tu.AddTask(tasks, ref maxId);   
 
         }
         else if (choice.Trim().ToLower() == "3")     // 3 - Edit Task (update, mark as done, remove)

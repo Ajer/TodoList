@@ -61,7 +61,7 @@ namespace TodoList
          public void WriteMenu()
          {
              Console.WriteLine();
-             Console.WriteLine("(1) Show task List (by date or project)");
+             Console.WriteLine("(1) Show task List (by date, by project or by title)");
              Console.WriteLine("(2) Add New Task");
              Console.WriteLine("(3) Edit Task (update, mark as done, remove)");
              Console.WriteLine("(4) Save and Quit");
@@ -90,7 +90,7 @@ namespace TodoList
 
 
 
-          private void EditTask(List<ProjectTask> tasks, int id, ref int mId)
+          private void EditTask(List<ProjectTask> tasks, int id)
           {
 
             string dataEditParameter = "";
@@ -100,10 +100,10 @@ namespace TodoList
 
             while (!dataEditParameterOk)
             {
-                dataEditParameter = ReadDataFromUser("Do you want to edit Due Date 'dt' , project 'p' , Title 't' or Status 's' ");            
+                dataEditParameter = ReadDataFromUser("Do you want to edit Due Date 'dd' , project 'p' , Title 't' or Status 's' ");            
                 dataEditParameter = dataEditParameter.Trim().ToLower();
 
-                if (dataEditParameter == "dt" || dataEditParameter == "p" || dataEditParameter == "t" || dataEditParameter == "s" || dataEditParameter == "q") 
+                if (dataEditParameter == "dd" || dataEditParameter == "p" || dataEditParameter == "t" || dataEditParameter == "s" || dataEditParameter == "q") 
                 {
                     dataEditParameterOk = true;
                 }
@@ -114,20 +114,33 @@ namespace TodoList
               
                 try
                 {
-                    ProjectTask pT = tasks.Find(item => item.Id == id);    //get task to edit
+                    ProjectTask pT = tasks.Find(item => item.Id == id);    //get task to edit, we know id exist here
 
-                    if (dataEditParameter == "dt")
+                    if (dataEditParameter == "dd")
                     {
-                        Console.WriteLine("To be implemented");
+                        string dataDueDate = "";
+                        bool dateTimeOk = false;
+
+                        while (!dateTimeOk)
+                        {
+                            dataDueDate = ReadDataFromUser("Enter a new value for DueDate in format YYYY-MM-DD");
+                            if (ValidateDate(dataDueDate.Trim()))
+                            {
+                                dateTimeOk = true;
+                            }
+                        }
+                        DateTime dueDt = Convert.ToDateTime(dataDueDate);
+                        pT.DueDate = dueDt;
+
                     }
                     else if (dataEditParameter == "p")
                     {
-                        string projName = ReadDataFromUser("Give new value for projectname");
+                        string projName = ReadDataFromUser("Give a new value for projectname");
                         pT.Project.Name = projName;
                     }
                     else if (dataEditParameter == "t")
                     {
-                        string taskTitle = ReadDataFromUser("Give new value for taskTitle");
+                        string taskTitle = ReadDataFromUser("Give a new value for taskTitle");
                         pT.TaskTitle = taskTitle;
                     }
                     else   // "s"
@@ -138,6 +151,8 @@ namespace TodoList
                         while (!statusOk)
                         {
                             status = ReadDataFromUser("Give new value for status. Not Started 'ns', Started 's' or Done 'd'");
+                            status = status.ToLower();
+
                             if (status=="ns" || status == "s" || status == "d")
                             {
                                 statusOk = true;
@@ -176,7 +191,7 @@ namespace TodoList
 
           // Reads user input for a task: title, projectname, duedate
           // status will be set to 'started'
-          public void ReadAllDataForAddTask(List<ProjectTask> tasks, ref int mIndex)
+          public void ReadAllDataForAddTask(List<ProjectTask> tasks, ref int mId)
           {
 
                 string dataTitle = "";
@@ -239,8 +254,8 @@ namespace TodoList
 
                     Project project = new Project(dataProjName);
 
-                    mIndex = mIndex + 1;  // create new Id for task
-                    ProjectTask t = new ProjectTask(mIndex,dataTitle,project,TaskStatus.NotStarted,dueDt);
+                    mId = mId + 1;    // create new Id for task
+                    ProjectTask t = new ProjectTask(mId,dataTitle,project,TaskStatus.NotStarted,dueDt);
 
                     tasks.Add(t);
 
@@ -275,7 +290,7 @@ namespace TodoList
           }
 
         
-          public void ChangeList(List<ProjectTask> tasks,ref int maxIndex)
+          public void ChangeList(List<ProjectTask> tasks,ref int maxId)
           {
 
              Console.WriteLine();
@@ -321,9 +336,9 @@ namespace TodoList
                     else
                     {
                         dataIdOk = true;
-                    }
-                    
+                    }       
                 }
+
                 if (dataId=="q")
                 {
                     break;
@@ -352,20 +367,21 @@ namespace TodoList
                 if (dataEditOrRemove == "e")   // edit task
                 {
 
-                    EditTask(tasks,id,ref maxIndex);
+                    EditTask(tasks,id);
 
 
                 }
                 else   // remove task  "x"
                 {
-                    RemoveTask(tasks,id,ref maxIndex);
+                    RemoveTask(tasks,id,ref maxId);
                 }         
              }
           }
 
                  
           
-          // Checks if a datetime-string of format "yyyy-MM-dd" is a valid date
+          // Checks if a datetime-string of format "yyyy-MM-dd" is a valid date.
+          // For instance: YYYY-04-30 is valid but YYYY-04-31 is not
           public bool ValidateDate(string str)
           {
               DateTime dt;
