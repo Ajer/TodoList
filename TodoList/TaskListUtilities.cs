@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using static System.Collections.Specialized.BitVector32;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace TodoList
@@ -41,7 +42,7 @@ namespace TodoList
             {
                 if (data.Trim().ToLower() != "q")   // data Ok
                 {
-                     return data.Trim();
+                     return data.Trim();    // data is returned trimmed
                 }
                 else if (data.Trim().ToLower() == "q")
                 {
@@ -84,9 +85,42 @@ namespace TodoList
           }
 
 
-          private void RemoveTask(List<ProjectTask> tasks, int id, ref int mId)
-          {
-          }
+        private void RemoveTask(List<ProjectTask> tasks, int id)
+        {
+            bool dataDeleteOk = false;
+            string dataDelete = "";
+
+            Console.WriteLine("");
+
+            while (!dataDeleteOk)
+            {
+                dataDelete = ReadDataFromUser("Are You sure you want to delete the task with id = " + id + "? Yes 'Y'/'y' . Abort 'A'/'a'");
+                dataDelete = dataDelete.ToLower();
+
+                if (dataDelete == "y" || dataDelete == "a" || dataDelete == "q")
+                {
+                    dataDeleteOk = true;
+                }
+            }
+            if (dataDelete.ToLower() != "q")   // Do the Edit
+            {
+
+                try
+                {
+                    ProjectTask pT = tasks.Find(item => item.Id == id);    //get task to remove. We know id exists here from ChangeLIst
+
+                    bool ok = tasks.Remove(pT);
+                    if (ok)
+                    {
+                        TaskRepository.SaveTasksToFile(tasks);   // List has been changed. Save new List to file.
+                        SuccessMessage("removed");             // The maxId stays the same even if we have erased this id here
+                    }
+                }
+                catch (Exception e)
+                {
+                }
+            }
+        }
 
 
 
@@ -101,7 +135,7 @@ namespace TodoList
             while (!dataEditParameterOk)
             {
                 dataEditParameter = ReadDataFromUser("Do you want to edit Due Date 'dd' , project 'p' , Title 't' or Status 's' ");            
-                dataEditParameter = dataEditParameter.Trim().ToLower();
+                dataEditParameter = dataEditParameter.ToLower();
 
                 if (dataEditParameter == "dd" || dataEditParameter == "p" || dataEditParameter == "t" || dataEditParameter == "s" || dataEditParameter == "q") 
                 {
@@ -114,7 +148,7 @@ namespace TodoList
               
                 try
                 {
-                    ProjectTask pT = tasks.Find(item => item.Id == id);    //get task to edit, we know id exist here
+                    ProjectTask pT = tasks.Find(item => item.Id == id);    //get task to edit, we know id exists here from ChangeLIst
 
                     if (dataEditParameter == "dd")
                     {
@@ -124,7 +158,7 @@ namespace TodoList
                         while (!dateTimeOk)
                         {
                             dataDueDate = ReadDataFromUser("Enter a new value for DueDate in format YYYY-MM-DD");
-                            if (ValidateDate(dataDueDate.Trim()))
+                            if (ValidateDate(dataDueDate))
                             {
                                 dateTimeOk = true;
                             }
@@ -179,7 +213,7 @@ namespace TodoList
                 catch (Exception e)
                 {
 
-                    Console.WriteLine("Something went wrong when editing tasks");
+                    Console.WriteLine("Something went wrong when editing tasks." + e.Message);
                 }               
 
             }
@@ -238,12 +272,12 @@ namespace TodoList
                     while (!dateTimeOk)
                     {
                       dataDueDate = ReadDataFromUser("Enter a DueDate in format YYYY-MM-DD");
-                      if (ValidateDate(dataDueDate.Trim()) || dataDueDate.Trim().ToLower() == "q")
+                      if (ValidateDate(dataDueDate) || dataDueDate.ToLower() == "q")
                       {
                            dateTimeOk = true;
                       }
                     }
-                    if (dataDueDate.Trim().ToLower() == "q")
+                    if (dataDueDate.ToLower() == "q")
                     {
                          break;
                     }
@@ -261,6 +295,7 @@ namespace TodoList
 
                     //write to file
                     TaskRepository.SaveTasksToFile(tasks); // "AutoSave" when change of Task-List is made
+                    TaskRepository.WriteMaxId(mId);    // Also update record of maxId on file since we dont wanna reuse id's
 
                     SuccessMessage("added");
                }
@@ -279,7 +314,7 @@ namespace TodoList
               {
                   dataSort = ReadDataFromUser("Write 'd' to show Tasks by Date ,'p' to show them by Project and " +
                     "'t' to show them by title");
-                  dataSort = dataSort.Trim().ToLower();
+                  dataSort = dataSort.ToLower();
 
                   if (dataSort == "d" || dataSort == "p" || dataSort == "t" || dataSort == "q")
                   {
@@ -290,7 +325,7 @@ namespace TodoList
           }
 
         
-          public void ChangeList(List<ProjectTask> tasks,ref int maxId)
+          public void ChangeList(List<ProjectTask> tasks)
           {
 
              Console.WriteLine();
@@ -307,12 +342,12 @@ namespace TodoList
                 {
                     Console.WriteLine("Write q to quit");
                     dataId = ReadDataFromUser("Write the Id-number for the task you want to change");
-                    dataId = dataId.Trim().ToLower();
+                    dataId = dataId.ToLower();
 
                     if (dataId != "q")
                     {
                         
-                        bool intOk = Int32.TryParse(dataId, out id);
+                        bool intOk = int.TryParse(dataId, out id);
 
                         if (intOk)
                         {
@@ -351,7 +386,7 @@ namespace TodoList
                 while (!dataEditOrRemoveOk)
                 {
                     dataEditOrRemove = ReadDataFromUser("Do you want to Edit 'E' or Remove 'X' the task");
-                    dataEditOrRemove = dataEditOrRemove.Trim().ToLower();
+                    dataEditOrRemove = dataEditOrRemove.ToLower();
 
                     if (dataEditOrRemove == "e" || dataEditOrRemove == "x" || dataEditOrRemove == "q")
                     {
@@ -369,12 +404,13 @@ namespace TodoList
 
                     EditTask(tasks,id);
 
-
                 }
                 else   // remove task  "x"
                 {
-                    RemoveTask(tasks,id,ref maxId);
-                }         
+                    RemoveTask(tasks,id);
+
+                    break;
+                }
              }
           }
 

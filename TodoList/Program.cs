@@ -7,9 +7,9 @@ void Main()
 
     TaskRepository tr = new TaskRepository();
    
-
     List<ProjectTask> tasks;
 
+    int maxId;
 
     if (File.Exists(tr.DataFilePath))   // TaskJson.data exists
     {
@@ -23,27 +23,21 @@ void Main()
             Console.WriteLine("An error has ocurred while reading data from file: " + e.Message);
             Environment.Exit(0);
         }
+
+        maxId = tr.ReadMaxId();  // Read maxId.txt
     }
     else
     {
         tasks = new List<ProjectTask>();   // TaskJson.data does not exist yet
+        tr.WriteMaxId(0);   // create a txt-file with maxId = 0
+        maxId = 0;
     }
+
 
 
     TaskListUtilities tu = new TaskListUtilities(tr);
 
-    //  int index = tasks.FindIndex(item => item.Id == 2);  // index kan påvisa existens av objektet
-    //  if (index != -1)
-    //  {
-    //    ProjectTask pT = tasks.Find(item => item.Id == 2);
-    //    pT.Project.Name = "Proj999";
-    //  }
-
-
-    int maxId = tr.GetMaxId(tasks);
-
-    
-
+   
 
     tu.WriteHeader();
 
@@ -71,7 +65,7 @@ void Main()
         else if (choice.Trim().ToLower() == "3")     // 3 - Edit Task (update, mark as done, remove)
         {
             tu.PrintAllTasks(tasks, "p");
-            tu.ChangeList(tasks,ref maxId);
+            tu.ChangeList(tasks);
 
         }
         else if (choice.Trim().ToLower() == "4")     // 4 = Save and Quit
