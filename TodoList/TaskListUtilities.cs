@@ -495,10 +495,27 @@ namespace TodoList
 
 
 
-          public void ListHeader()
+          public void ListHeader(string sort)
           {
+              string taskString = "Task";
+              string projString = "Project";
+              string dueString = "DueDate";
+
+              if (sort == "p")
+              {
+                projString = "Project'";
+              }
+              else if (sort == "d")
+              {
+                dueString = "DueDate'";
+              }
+              else if (sort == "t")
+              {
+                taskString = "Task'";
+              }
+
               Console.WriteLine();
-              Console.WriteLine("Id".PadRight(7) + "Task".PadRight(15) + "Project".PadRight(15) + "Status".ToString().PadRight(14)+ "DueDate".ToString());
+              Console.WriteLine("Id".PadRight(7) + taskString.PadRight(15) + projString.PadRight(15) + "Status".ToString().PadRight(14)+ dueString.ToString());
               Console.WriteLine("---".PadRight(7) + "----".PadRight(15) + "-------".PadRight(15) + "------".ToString().PadRight(14) + "-------".ToString());
           }
 
@@ -512,7 +529,7 @@ namespace TodoList
               bool srch = (search != "") ? true : false;
               bool found = false;
 
-              ListHeader();
+              ListHeader(sort);
 
               if (srch)
               {
