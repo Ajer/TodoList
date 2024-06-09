@@ -29,7 +29,8 @@ namespace TodoList
             {
                 try
                 {
-                    string text = File.ReadAllText(MaxIdPath);      
+                    var path = MaxIdPath;
+                    string text = File.ReadAllText(path);      
                     text = text.Trim();
                     int res;
 
@@ -50,21 +51,23 @@ namespace TodoList
         // Overwrites old value
         // If File does not exist it creates a new one 
         public void WriteMaxId(int maxId)
-        {          
-            File.WriteAllText(MaxIdPath, maxId.ToString());            
+        {
+            var path = MaxIdPath;
+            File.WriteAllText(path, maxId.ToString());            
         }
 
 
         public void SaveTasksToFile(List<ProjectTask> tasks)
         {
+            var path = DataFilePath;
             string json = JsonSerializer.Serialize(tasks);
-            File.WriteAllText(DataFilePath, json);
+            File.WriteAllText(path, json);
         }
 
         public List<ProjectTask> ReadTasksFromFile()
         {
-            //JsonFileReader js = new JsonFileReader();
-            List<ProjectTask> item = JsonFileReader.Read<List<ProjectTask>>(DataFilePath);
+            var path = DataFilePath;
+            List<ProjectTask> item = JsonFileReader.Read<List<ProjectTask>>(path);
             return item;
         }
     }
