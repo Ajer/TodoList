@@ -317,11 +317,11 @@ namespace TodoList
 
               while (!dataSortOk)
               {
-                  dataSort = ReadDataFromUser("Write 'd' to show Tasks by Date ,'p' to show them by Project and " +
-                    "'t' to show them by title");
+                  dataSort = ReadDataFromUser("Write 'd' to show/sort Tasks by Date ,'p' by Project, " +
+                    "'t' by title and 's' by status");
                   dataSort = dataSort.ToLower();
 
-                  if (dataSort == "d" || dataSort == "p" || dataSort == "t" || dataSort == "q")
+                  if (dataSort == "d" || dataSort == "p" || dataSort == "t" || dataSort == "s" || dataSort == "q")
                   {
                     dataSortOk = true;
                   }
@@ -437,7 +437,6 @@ namespace TodoList
 
 
          
-
           
           // Sort by ascending Title
           public List<ProjectTask> TitleSort(List<ProjectTask> tasks)
@@ -451,27 +450,37 @@ namespace TodoList
              return tasks.OrderBy(item => item.Project.Name).ToList();
           }
 
-          // Sort by ascending ProjectName
+          // Sort by ascending date
           public List<ProjectTask> DateSort(List<ProjectTask> tasks)
           {
               return tasks.OrderBy(item => item.DueDate).ToList();
           }
 
+          // Sort by alphabetical status:  Done,NotStarted,Started
+          public List<ProjectTask> StatusSort(List<ProjectTask> tasks)
+          {
+              return tasks.OrderBy(item => item.Status.ToString()).ToList();
+          }
+
 
           public List<ProjectTask> GetSortedTasks(List<ProjectTask> tasks, string sort)
-          { 
-             if (sort=="p")
-             {
-                  return ProjectSort(tasks);
-             }
-             else if (sort=="d")
-             {
-                return DateSort(tasks);
-             }
-             else                  //   sort=="t"
-             {
-                return TitleSort(tasks);
-             }
+          {
+              if (sort == "p")
+              {
+                 return ProjectSort(tasks);
+              }
+              else if (sort == "d")
+              {
+                 return DateSort(tasks);
+              }
+              else if (sort == "s")               
+              {
+                return StatusSort(tasks);
+              }
+              else       //   sort=="t"
+              {
+                return TitleSort(tasks);        
+              }
           }
           
 
@@ -500,6 +509,7 @@ namespace TodoList
               string taskString = "Task";
               string projString = "Project";
               string dueString = "DueDate";
+              string statusString = "Status";
 
               if (sort == "p")
               {
@@ -513,9 +523,13 @@ namespace TodoList
               {
                 taskString = "Task'";
               }
+              else if (sort == "s")
+              {
+                statusString = "Status'";
+              }
 
               Console.WriteLine();
-              Console.WriteLine("Id".PadRight(7) + taskString.PadRight(15) + projString.PadRight(15) + "Status".ToString().PadRight(14)+ dueString.ToString());
+              Console.WriteLine("Id".PadRight(7) + taskString.PadRight(15) + projString.PadRight(15) + statusString.ToString().PadRight(14)+ dueString.ToString());
               Console.WriteLine("---".PadRight(7) + "----".PadRight(15) + "-------".PadRight(15) + "------".ToString().PadRight(14) + "-------".ToString());
           }
 
@@ -589,7 +603,7 @@ namespace TodoList
               }
               Console.WriteLine();
               Console.WriteLine("---------------------------------------------");
-        }
+          }
     }
     public class JsonFileReader
     {
