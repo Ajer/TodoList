@@ -54,10 +54,15 @@ namespace TodoList
 
          public void WriteHeader(List<ProjectTask> tasks)
          {
+            int done = tasks.FindAll(item => item.Status == TaskStatus.Done).Count();
+            int notDone = tasks.Count - done;  // "notstarted" and "started"
+
             Console.WriteLine();
-            Console.WriteLine("Welcome to Todoly you have X tasks todo and Y tasks are done.");
+            Console.WriteLine("Welcome to Todoly you have " + notDone.ToString() + " tasks todo and " + done.ToString() + " tasks are done.");
             Console.WriteLine("Pick an option:");
-        }
+         }
+
+         
 
          public void WriteMenu()
          {
