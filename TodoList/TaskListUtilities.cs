@@ -17,24 +17,24 @@ namespace TodoList
     public class TaskListUtilities
     {
 
-         public TaskRepository TaskRepository { get; set; }
+        public TaskRepository TaskRepository { get; set; }
 
 
 
-         //public List<Project> Projects { get; set; }
+        //public List<Project> Projects { get; set; }
 
 
 
-         public TaskListUtilities(TaskRepository tr)
-         {
-              //Projects = new List<Project>();
+        public TaskListUtilities(TaskRepository tr)
+        {
+            //Projects = new List<Project>();
 
-              TaskRepository = tr;
-         }
+            TaskRepository = tr;
+        }
 
 
-         public string ReadDataFromUser(string userAction)
-         {
+        public string ReadDataFromUser(string userAction)
+        {
             Console.Write(userAction + ": ");    //exempel  userAction = "Enter a Category"
             string? data = Console.ReadLine();
 
@@ -42,52 +42,52 @@ namespace TodoList
             {
                 if (data.Trim().ToLower() != "q")   // data Ok
                 {
-                     return data.Trim();    // data is returned trimmed
+                    return data.Trim();    // data is returned trimmed
                 }
                 else if (data.Trim().ToLower() == "q")
                 {
-                     return "q";
+                    return "q";
                 }
-             }
-             return "";
-         }
+            }
+            return "";
+        }
 
-         public void WriteHeader(List<ProjectTask> tasks)
-         {
+        public void WriteHeader(List<ProjectTask> tasks)
+        {
             int done = tasks.FindAll(item => item.Status == TaskStatus.Done).Count();
             int notDone = tasks.Count - done;  // "notstarted" and "started"
 
             Console.WriteLine();
             Console.WriteLine("Welcome to Todoly you have " + notDone.ToString() + " tasks todo and " + done.ToString() + " tasks are done.");
             Console.WriteLine("Pick an option:");
-         }
-
-         
-
-         public void WriteMenu()
-         {
-             Console.WriteLine();
-             Console.WriteLine("(1) Show task List (by date, by project or by title)");
-             Console.WriteLine("(2) Add New Task");
-             Console.WriteLine("(3) Edit Task (update, mark as done, remove)");
-             Console.WriteLine("(4) Save and Quit");
-         }
+        }
 
 
-                
-          public void SuccessMessage(string action)
-          {
-              Console.ForegroundColor = ConsoleColor.Green;
-              Console.WriteLine("The Task was successfully " + action);   // action= "added" / "edited" etc
-              Console.ResetColor();
-              Console.WriteLine("-----------------------------------------");
-          }
+
+        public void WriteMenu()
+        {
+            Console.WriteLine();
+            Console.WriteLine("(1) Show task List (by date, by project or by title)");
+            Console.WriteLine("(2) Add New Task");
+            Console.WriteLine("(3) Edit Task (update, mark as done, remove)");
+            Console.WriteLine("(4) Save and Quit");
+        }
 
 
-          public void AddTask(List<ProjectTask> tasks,ref int mIndex)
-          {
-              ReadAllDataForAddTask(tasks,ref mIndex);
-          }
+
+        public void SuccessMessage(string action)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("The Task was successfully " + action);   // action= "added" / "edited" etc
+            Console.ResetColor();
+            Console.WriteLine("-----------------------------------------");
+        }
+
+
+        public void AddTask(List<ProjectTask> tasks, ref int mIndex)
+        {
+            ReadAllDataForAddTask(tasks, ref mIndex);
+        }
 
 
         private void RemoveTask(List<ProjectTask> tasks, int id)
@@ -129,8 +129,8 @@ namespace TodoList
 
 
 
-          private void EditTask(List<ProjectTask> tasks, int id)
-          {
+        private void EditTask(List<ProjectTask> tasks, int id)
+        {
 
             string dataEditParameter = "";
             bool dataEditParameterOk = false;
@@ -139,10 +139,10 @@ namespace TodoList
 
             while (!dataEditParameterOk)
             {
-                dataEditParameter = ReadDataFromUser("Do you want to edit Due Date 'dd' , project 'p' , Title 't' or Status 's' ");            
+                dataEditParameter = ReadDataFromUser("Do you want to edit Due Date 'dd' , project 'p' , Title 't' or Status 's' ");
                 dataEditParameter = dataEditParameter.ToLower();
 
-                if (dataEditParameter == "dd" || dataEditParameter == "p" || dataEditParameter == "t" || dataEditParameter == "s" || dataEditParameter == "q") 
+                if (dataEditParameter == "dd" || dataEditParameter == "p" || dataEditParameter == "t" || dataEditParameter == "s" || dataEditParameter == "q")
                 {
                     dataEditParameterOk = true;
                 }
@@ -150,7 +150,7 @@ namespace TodoList
 
             if (dataEditParameter.ToLower() != "q")   // Do the Edit
             {
-              
+
                 try
                 {
                     ProjectTask pT = tasks.Find(item => item.Id == id);    //get task to edit, we know id exists here from ChangeLIst
@@ -192,20 +192,20 @@ namespace TodoList
                             status = ReadDataFromUser("Give new value for status. Not Started 'ns', Started 's' or Done 'd'");
                             status = status.ToLower();
 
-                            if (status=="ns" || status == "s" || status == "d")
+                            if (status == "ns" || status == "s" || status == "d")
                             {
                                 statusOk = true;
                             }
                         }
-                        if (status=="ns")
+                        if (status == "ns")
                         {
                             pT.Status = TaskStatus.NotStarted;
                         }
-                        else if (status=="s")
+                        else if (status == "s")
                         {
                             pT.Status = TaskStatus.Started;
                         }
-                        else if (status=="d")
+                        else if (status == "d")
                         {
                             pT.Status = TaskStatus.Done;
                         }
@@ -219,125 +219,125 @@ namespace TodoList
                 {
 
                     Console.WriteLine("Something went wrong when editing tasks." + e.Message);
-                }               
+                }
 
             }
 
-          }
+        }
 
 
 
 
-          // Reads user input for a task: title, projectname, duedate
-          // status will be set to 'started'
-          public void ReadAllDataForAddTask(List<ProjectTask> tasks, ref int mId)
-          {
+        // Reads user input for a task: title, projectname, duedate
+        // status will be set to 'started'
+        public void ReadAllDataForAddTask(List<ProjectTask> tasks, ref int mId)
+        {
 
-                string dataTitle = "";
-                string dataProjName = "";
-                //string dataStatus = "";  // Behövs inte : sätt till "NotStarted"
-                string dataDueDate = "";
+            string dataTitle = "";
+            string dataProjName = "";
+            //string dataStatus = "";  // Behövs inte : sätt till "NotStarted"
+            string dataDueDate = "";
 
 
-                while (true)
+            while (true)
+            {
+                bool dataTitleOk = false;
+
+                Console.WriteLine();
+                Console.WriteLine("Write q to quit");
+
+                while (!dataTitleOk)
                 {
-                    bool dataTitleOk = false;
-
-                    Console.WriteLine();
-                    Console.WriteLine("Write q to quit");
-
-                    while (!dataTitleOk)
+                    dataTitle = ReadDataFromUser("Enter a Task Title");
+                    if (dataTitle != "")  // either "q" or other not empty data makes user break out of this loop
                     {
-                        dataTitle = ReadDataFromUser("Enter a Task Title");
-                        if (dataTitle != "")  // either "q" or other not empty data makes user break out of this loop
-                        {
-                            dataTitleOk = true;
-                        }
+                        dataTitleOk = true;
                     }
-                    if (dataTitle.ToLower() == "q")
+                }
+                if (dataTitle.ToLower() == "q")
+                {
+                    break;
+                }
+
+                bool projNameOk = false;
+                while (!projNameOk)
+                {
+                    dataProjName = ReadDataFromUser("Enter a Project Name");
+                    if (dataProjName != "")
                     {
-                        break;
+                        projNameOk = true;
                     }
+                }
+                if (dataProjName.ToLower() == "q")
+                {
+                    break;
+                }
 
-                    bool projNameOk = false;
-                    while (!projNameOk)
+                bool dateTimeOk = false;
+                while (!dateTimeOk)
+                {
+                    dataDueDate = ReadDataFromUser("Enter a DueDate in format YYYY-MM-DD");
+                    if (ValidateDate(dataDueDate) || dataDueDate.ToLower() == "q")
                     {
-                        dataProjName = ReadDataFromUser("Enter a Project Name");
-                        if (dataProjName != "")
-                        {
-                            projNameOk = true;
-                        }
+                        dateTimeOk = true;
                     }
-                    if (dataProjName.ToLower() == "q")
-                    {
-                        break;
-                    }
+                }
+                if (dataDueDate.ToLower() == "q")
+                {
+                    break;
+                }
 
-                    bool dateTimeOk = false;
-                    while (!dateTimeOk)
-                    {
-                      dataDueDate = ReadDataFromUser("Enter a DueDate in format YYYY-MM-DD");
-                      if (ValidateDate(dataDueDate) || dataDueDate.ToLower() == "q")
-                      {
-                           dateTimeOk = true;
-                      }
-                    }
-                    if (dataDueDate.ToLower() == "q")
-                    {
-                         break;
-                    }
+                // All datas here because no break has been performed
 
-                    // All datas here because no break has been performed
+                DateTime dueDt = Convert.ToDateTime(dataDueDate);
 
-                    DateTime dueDt = Convert.ToDateTime(dataDueDate);
+                Project project = new Project(dataProjName);
 
-                    Project project = new Project(dataProjName);
+                mId = mId + 1;    // create new Id for task
+                ProjectTask t = new ProjectTask(mId, dataTitle, project, TaskStatus.NotStarted, dueDt);
 
-                    mId = mId + 1;    // create new Id for task
-                    ProjectTask t = new ProjectTask(mId,dataTitle,project,TaskStatus.NotStarted,dueDt);
+                tasks.Add(t);
 
-                    tasks.Add(t);
+                //write to file
+                TaskRepository.SaveTasksToFile(tasks); // "AutoSave" when change of Task-List is made
+                TaskRepository.WriteMaxId(mId);    // Also update record of maxId on file since we dont wanna reuse id's
 
-                    //write to file
-                    TaskRepository.SaveTasksToFile(tasks); // "AutoSave" when change of Task-List is made
-                    TaskRepository.WriteMaxId(mId);    // Also update record of maxId on file since we dont wanna reuse id's
-
-                    SuccessMessage("added");
-               }
-          }
+                SuccessMessage("added");
+            }
+        }
 
 
-          public string UserSortsList()
-          {
-              string dataSort = "";
-              bool dataSortOk = false;
+        public string UserSortsList()
+        {
+            string dataSort = "";
+            bool dataSortOk = false;
 
-              Console.WriteLine();
-              Console.WriteLine("Write q to quit");
+            Console.WriteLine();
+            Console.WriteLine("Write q to quit");
 
-              while (!dataSortOk)
-              {
-                  dataSort = ReadDataFromUser("Write 'd' to show/sort Tasks by Date ,'p' by Project, " +
-                    "'t' by title and 's' by status");
-                  dataSort = dataSort.ToLower();
+            while (!dataSortOk)
+            {
+                dataSort = ReadDataFromUser("Write 'd' to show/sort Tasks by Date ,'p' by Project, " +
+                  "'t' by title and 's' by status");
+                dataSort = dataSort.ToLower();
 
-                  if (dataSort == "d" || dataSort == "p" || dataSort == "t" || dataSort == "s" || dataSort == "q")
-                  {
+                if (dataSort == "d" || dataSort == "p" || dataSort == "t" || dataSort == "s" || dataSort == "q")
+                {
                     dataSortOk = true;
-                  }
-              }
-              return dataSort;
-          }
+                }
+            }
+            return dataSort;
+        }
 
-        
-          public void ChangeList(List<ProjectTask> tasks)
-          {
 
-             Console.WriteLine();
-             
+        public void ChangeList(List<ProjectTask> tasks)
+        {
 
-             while (true)
-             {
+            Console.WriteLine();
+
+
+            while (true)
+            {
                 string dataId = "";
                 bool dataIdOk = false;
 
@@ -351,14 +351,14 @@ namespace TodoList
 
                     if (dataId != "q")
                     {
-                        
+
                         bool intOk = int.TryParse(dataId, out id);
 
                         if (intOk)
                         {
                             int index = tasks.FindIndex(item => item.Id == id);
 
-                            if (index >= 0 )    // id exists
+                            if (index >= 0)    // id exists
                             {
                                 dataIdOk = true;
                             }
@@ -374,10 +374,10 @@ namespace TodoList
                     else
                     {
                         dataIdOk = true;
-                    }       
+                    }
                 }
 
-                if (dataId=="q")
+                if (dataId == "q")
                 {
                     break;
                 }
@@ -400,170 +400,170 @@ namespace TodoList
                 {
                     break;
                 }
-                
+
                 // here dataEditOrRemove is either "e"  or "x" 
                 if (dataEditOrRemove == "e")   // edit task
                 {
 
-                    EditTask(tasks,id);
+                    EditTask(tasks, id);
 
                 }
                 else   // remove task  "x"
                 {
-                    RemoveTask(tasks,id);
+                    RemoveTask(tasks, id);
 
                     break;
                 }
-             }
-          }
-
-                 
-          
-          // Checks if a datetime-string of format "yyyy-MM-dd" is a valid date.
-          // For instance: YYYY-04-30 is valid but YYYY-04-31 is not
-          public bool ValidateDate(string str)
-          {
-              DateTime dt;
-              string[] formats = { "yyyy-MM-dd" };
-              if (DateTime.TryParseExact(str, formats, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out dt))
-              {         
-                    return true;                            
-              }
-              else
-              {
-                  return false;
-              }
-          }
+            }
+        }
 
 
-         
-          
-          // Sort by ascending Title
-          public List<ProjectTask> TitleSort(List<ProjectTask> tasks)
-          {
-                return tasks.OrderBy(item => item.TaskTitle).ToList();
-          }
 
-          // Sort by ascending ProjectName
-          public List<ProjectTask> ProjectSort(List<ProjectTask> tasks)
-          {
-             return tasks.OrderBy(item => item.Project.Name).ToList();
-          }
-
-          // Sort by ascending date
-          public List<ProjectTask> DateSort(List<ProjectTask> tasks)
-          {
-              return tasks.OrderBy(item => item.DueDate).ToList();
-          }
-
-          // Sort by alphabetical status:  Done,NotStarted,Started
-          public List<ProjectTask> StatusSort(List<ProjectTask> tasks)
-          {
-              return tasks.OrderBy(item => item.Status.ToString()).ToList();
-          }
+        // Checks if a datetime-string of format "yyyy-MM-dd" is a valid date.
+        // For instance: YYYY-04-30 is valid but YYYY-04-31 is not
+        public bool ValidateDate(string str)
+        {
+            DateTime dt;
+            string[] formats = { "yyyy-MM-dd" };
+            if (DateTime.TryParseExact(str, formats, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out dt))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
 
-          public List<ProjectTask> GetSortedTasks(List<ProjectTask> tasks, string sort)
-          {
-              if (sort == "p")
-              {
-                 return ProjectSort(tasks);
-              }
-              else if (sort == "d")
-              {
-                 return DateSort(tasks);
-              }
-              else if (sort == "s")               
-              {
+
+
+        // Sort by ascending Title
+        public List<ProjectTask> TitleSort(List<ProjectTask> tasks)
+        {
+            return tasks.OrderBy(item => item.TaskTitle).ToList();
+        }
+
+        // Sort by ascending ProjectName
+        public List<ProjectTask> ProjectSort(List<ProjectTask> tasks)
+        {
+            return tasks.OrderBy(item => item.Project.Name).ToList();
+        }
+
+        // Sort by ascending date
+        public List<ProjectTask> DateSort(List<ProjectTask> tasks)
+        {
+            return tasks.OrderBy(item => item.DueDate).ToList();
+        }
+
+        // Sort by alphabetical status:  Done,NotStarted,Started
+        public List<ProjectTask> StatusSort(List<ProjectTask> tasks)
+        {
+            return tasks.OrderBy(item => item.Status.ToString()).ToList();
+        }
+
+
+        public List<ProjectTask> GetSortedTasks(List<ProjectTask> tasks, string sort)
+        {
+            if (sort == "p")
+            {
+                return ProjectSort(tasks);
+            }
+            else if (sort == "d")
+            {
+                return DateSort(tasks);
+            }
+            else if (sort == "s")
+            {
                 return StatusSort(tasks);
-              }
-              else       //   sort=="t"
-              {
-                return TitleSort(tasks);        
-              }
-          }
-          
-
-
-          public string ReadSearchTask()
-          {
-              string? s = "";
-              string str = "";
-              while (true)
-              {
-                  Console.Write("Enter a product to search for: ");
-                  s = Console.ReadLine();
-                  str = s.Trim().ToLower(); 
-                  if (!string.IsNullOrEmpty(s) || str.Equals("q"))
-                  {
-                      break;
-                  }
-              }
-              return str;
-          }
+            }
+            else       //   sort=="t"
+            {
+                return TitleSort(tasks);
+            }
+        }
 
 
 
-          public void ListHeader(string sort)
-          {
-              string taskString = "Task";
-              string projString = "Project";
-              string dueString = "DueDate";
-              string statusString = "Status";
+        public string ReadSearchTask()
+        {
+            string? s = "";
+            string str = "";
+            while (true)
+            {
+                Console.Write("Enter a product to search for: ");
+                s = Console.ReadLine();
+                str = s.Trim().ToLower();
+                if (!string.IsNullOrEmpty(s) || str.Equals("q"))
+                {
+                    break;
+                }
+            }
+            return str;
+        }
 
-              if (sort == "p")
-              {
+
+
+        public void ListHeader(string sort)
+        {
+            string taskString = "Task";
+            string projString = "Project";
+            string dueString = "DueDate";
+            string statusString = "Status";
+
+            if (sort == "p")
+            {
                 projString = "Project'";
-              }
-              else if (sort == "d")
-              {
+            }
+            else if (sort == "d")
+            {
                 dueString = "DueDate'";
-              }
-              else if (sort == "t")
-              {
+            }
+            else if (sort == "t")
+            {
                 taskString = "Task'";
-              }
-              else if (sort == "s")
-              {
+            }
+            else if (sort == "s")
+            {
                 statusString = "Status'";
-              }
+            }
 
-              Console.WriteLine();
-              Console.WriteLine("Id".PadRight(7) + taskString.PadRight(15) + projString.PadRight(15) + statusString.ToString().PadRight(14)+ dueString.ToString());
-              Console.WriteLine("---".PadRight(7) + "----".PadRight(15) + "-------".PadRight(15) + "------".ToString().PadRight(14) + "-------".ToString());
-          }
+            Console.WriteLine();
+            Console.WriteLine("Id".PadRight(7) + taskString.PadRight(15) + projString.PadRight(20) + statusString.ToString().PadRight(14) + dueString.ToString());
+            Console.WriteLine("---".PadRight(7) + "----".PadRight(15) + "-------".PadRight(20) + "------".ToString().PadRight(14) + "-------".ToString());
+        }
 
 
 
-          public void PrintAllTasks(List<ProjectTask> tasks, string sort, string search = "")
-          {
-      
-              List<ProjectTask> sorted = GetSortedTasks(tasks,sort);   
+        public void PrintAllTasks(List<ProjectTask> tasks, string sort, string search = "")
+        {
 
-              bool srch = (search != "") ? true : false;
-              bool found = false;
+            List<ProjectTask> sorted = GetSortedTasks(tasks, sort);
 
-              ListHeader(sort);
+            bool srch = (search != "") ? true : false;
+            bool found = false;
 
-              if (srch)
-              {
+            ListHeader(sort);
 
-                  //FirstOrDefault() returns the default value of the Data Type used if nothing is found,
-                  //in case of Reference type like classes or objects it is NULL.
+            if (srch)
+            {
 
-                  ProjectTask? searchP = sorted.FirstOrDefault(item => item.TaskTitle.ToLower().Equals(search));
-                  if (searchP != null)     // searched for task found
-                  {
-                       found = true;
-                  }
-                  else
-                  {
-                       found = false;
-                  }
-              }         
+                //FirstOrDefault() returns the default value of the Data Type used if nothing is found,
+                //in case of Reference type like classes or objects it is NULL.
 
-              if (srch && found)
-              {
+                ProjectTask? searchP = sorted.FirstOrDefault(item => item.TaskTitle.ToLower().Equals(search));
+                if (searchP != null)     // searched for task found
+                {
+                    found = true;
+                }
+                else
+                {
+                    found = false;
+                }
+            }
+
+            if (srch && found)
+            {
 
                 //foreach (var prod in defaultSorted)
                 //{
@@ -579,9 +579,9 @@ namespace TodoList
                 //        Console.WriteLine(prod.Category.PadRight(20) + prod.ProductName.PadRight(20) + prod.Price);
                 //    }
                 //}
-              }
-              else if (srch && !found)
-              {
+            }
+            else if (srch && !found)
+            {
                 //Console.WriteLine("The Item was not found");
 
                 //foreach (var prod in defaultSorted) // Show List
@@ -589,21 +589,21 @@ namespace TodoList
                 //    Console.WriteLine(prod.Category.PadRight(20) + prod.ProductName.PadRight(20) + prod.Price);
                 //}
 
-              }
-              else   // normal-display of List  (without search)
-              {
+            }
+            else   // normal-display of List  (without search)
+            {
 
-                  foreach (var task in sorted) // Show List
-                  {
-                      string dt = task.DueDate.ToString("yyyy-MM-dd");
-                      string status = (task.Status == TaskStatus.NotStarted) ? "Not Started" : task.Status.ToString();
+                foreach (var task in sorted) // Show List
+                {
+                    string dt = task.DueDate.ToString("yyyy-MM-dd");
+                    string status = (task.Status == TaskStatus.NotStarted) ? "Not Started" : task.Status.ToString();
 
-                      Console.WriteLine(task.Id.ToString().PadRight(7) + task.TaskTitle.PadRight(15) + task.Project.Name.PadRight(15) + status.PadRight(14)+ dt);
-                  }
-              }
-              Console.WriteLine();
-              Console.WriteLine("---------------------------------------------");
-          }
+                    Console.WriteLine(task.Id.ToString().PadRight(7) + task.TaskTitle.PadRight(15) + task.Project.Name.PadRight(20) + status.PadRight(14) + dt);
+                }
+            }
+            Console.WriteLine();
+            Console.WriteLine("---------------------------------------------");
+        }
     }
     public class JsonFileReader
     {
