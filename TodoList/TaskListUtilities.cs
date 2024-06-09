@@ -52,7 +52,7 @@ namespace TodoList
              return "";
          }
 
-         public void WriteHeader()
+         public void WriteHeader(List<ProjectTask> tasks)
          {
             Console.WriteLine();
             Console.WriteLine("Welcome to Todoly you have X tasks todo and Y tasks are done.");
@@ -102,7 +102,7 @@ namespace TodoList
                     dataDeleteOk = true;
                 }
             }
-            if (dataDelete.ToLower() != "q")   // Do the Edit
+            if (dataDelete != "a" && dataDelete != "q")   // Do the Edit
             {
 
                 try
@@ -359,14 +359,12 @@ namespace TodoList
                             }
                             else  // -1
                             {
+                                Console.ForegroundColor = ConsoleColor.Red;
                                 Console.WriteLine("The ID was not found");
-                                break;
+                                Console.ResetColor();
                             }
                         }
-                        else
-                        {
-                            Console.WriteLine("Not recognized");
-                        }
+                        // else : not recognized as id
                     }
                     else
                     {

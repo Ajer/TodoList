@@ -34,12 +34,10 @@ void Main()
     }
 
 
-
     TaskListUtilities tu = new TaskListUtilities(tr);
 
    
-
-    tu.WriteHeader();
+    tu.WriteHeader(tasks);
 
     string choice = "";
     
