@@ -75,7 +75,7 @@ namespace TodoList
 
 
 
-        public void SuccessMessage(string action)
+        private void SuccessMessage(string action)
         {
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("The Task was successfully " + action);   // action= "added" / "edited" etc
@@ -421,7 +421,7 @@ namespace TodoList
 
         // Checks if a datetime-string of format "yyyy-MM-dd" is a valid date.
         // For instance: YYYY-04-30 is valid but YYYY-04-31 is not
-        public bool ValidateDate(string str)
+        private bool ValidateDate(string str)
         {
             DateTime dt;
             string[] formats = { "yyyy-MM-dd" };
@@ -439,31 +439,31 @@ namespace TodoList
 
 
         // Sort by ascending Title
-        public List<ProjectTask> TitleSort(List<ProjectTask> tasks)
+        private List<ProjectTask> TitleSort(List<ProjectTask> tasks)
         {
             return tasks.OrderBy(item => item.TaskTitle).ToList();
         }
 
         // Sort by ascending ProjectName
-        public List<ProjectTask> ProjectSort(List<ProjectTask> tasks)
+        private List<ProjectTask> ProjectSort(List<ProjectTask> tasks)
         {
             return tasks.OrderBy(item => item.Project.Name).ToList();
         }
 
         // Sort by ascending date
-        public List<ProjectTask> DateSort(List<ProjectTask> tasks)
+        private List<ProjectTask> DateSort(List<ProjectTask> tasks)
         {
             return tasks.OrderBy(item => item.DueDate).ToList();
         }
 
         // Sort by alphabetical status:  Done,NotStarted,Started
-        public List<ProjectTask> StatusSort(List<ProjectTask> tasks)
+        private List<ProjectTask> StatusSort(List<ProjectTask> tasks)
         {
             return tasks.OrderBy(item => item.Status.ToString()).ToList();
         }
 
 
-        public List<ProjectTask> GetSortedTasks(List<ProjectTask> tasks, string sort)
+        private List<ProjectTask> GetSortedTasks(List<ProjectTask> tasks, string sort)
         {
             if (sort == "p")
             {
@@ -504,7 +504,7 @@ namespace TodoList
 
 
 
-        public void ListHeader(string sort)
+        private void ListHeader(string sort)
         {
             string taskString = "Task";
             string projString = "Project";
@@ -529,8 +529,8 @@ namespace TodoList
             }
 
             Console.WriteLine();
-            Console.WriteLine("Id".PadRight(7) + taskString.PadRight(15) + projString.PadRight(20) + statusString.ToString().PadRight(14) + dueString.ToString());
-            Console.WriteLine("---".PadRight(7) + "----".PadRight(15) + "-------".PadRight(20) + "------".ToString().PadRight(14) + "-------".ToString());
+            Console.WriteLine("Id".PadRight(7) + taskString.PadRight(25) + projString.PadRight(23) + statusString.ToString().PadRight(15) + dueString.ToString());
+            Console.WriteLine("---".PadRight(7) + "----".PadRight(25) + "-------".PadRight(23) + "------".ToString().PadRight(15) + "-------".ToString());
         }
 
 
@@ -598,7 +598,7 @@ namespace TodoList
                     string dt = task.DueDate.ToString("yyyy-MM-dd");
                     string status = (task.Status == TaskStatus.NotStarted) ? "Not Started" : task.Status.ToString();
 
-                    Console.WriteLine(task.Id.ToString().PadRight(7) + task.TaskTitle.PadRight(15) + task.Project.Name.PadRight(20) + status.PadRight(14) + dt);
+                    Console.WriteLine(task.Id.ToString().PadRight(7) + task.TaskTitle.PadRight(25) + task.Project.Name.PadRight(23) + status.PadRight(15) + dt);
                 }
             }
             Console.WriteLine();
