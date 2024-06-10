@@ -7,4 +7,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Old_data_files\**" />
+    <EmbeddedResource Remove="Old_data_files\**" />
+    <None Remove="Old_data_files\**" />
+  </ItemGroup>
+
 </Project>
