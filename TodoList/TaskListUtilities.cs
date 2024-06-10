@@ -551,15 +551,15 @@ namespace TodoList
                 //FirstOrDefault() returns the default value of the Data Type used if nothing is found,
                 //in case of Reference type like classes or objects it is NULL.
 
-                ProjectTask? searchP = sorted.FirstOrDefault(item => item.TaskTitle.ToLower().Equals(search));
-                if (searchP != null)     // searched for task found
-                {
-                    found = true;
-                }
-                else
-                {
-                    found = false;
-                }
+                //ProjectTask? searchP = sorted.FirstOrDefault(item => item.TaskTitle.ToLower().Equals(search));
+                //if (searchP != null)     // searched for task found
+                //{
+                //    found = true;
+                //}
+                //else
+                //{
+                //    found = false;
+                //}
             }
 
             if (srch && found)
