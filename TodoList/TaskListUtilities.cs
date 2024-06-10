@@ -84,9 +84,9 @@ namespace TodoList
         }
 
 
-        public void AddTask(List<ProjectTask> tasks, ref int mIndex)
+        public void AddTask(List<ProjectTask> tasks, ref int mId)
         {
-            ReadAllDataForAddTask(tasks, ref mIndex);
+            ReadAllDataForAddTask(tasks, ref mId);
         }
 
 
