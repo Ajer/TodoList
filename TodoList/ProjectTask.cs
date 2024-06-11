@@ -35,8 +35,8 @@ namespace TodoList
 
     public enum TaskStatus
     {
-        NotStarted,
-        Started,
-        Done
+        NotStarted,       // 0
+        Started,          // 1
+        Done              // 2
     }
 }

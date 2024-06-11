@@ -24,6 +24,8 @@ namespace TodoList
         //    return 0;
         //}
 
+
+        // Read maxId from MaxId.txt text-file
         public int ReadMaxId()
         {
             if (File.Exists(MaxIdPath))
@@ -35,7 +37,7 @@ namespace TodoList
                     text = text.Trim();
                     int res;
 
-                    bool ok = int.TryParse(text, out res);
+                    bool ok = int.TryParse(text, out res);   // Parse to integer
                     if (ok)
                     {
                         return res;
@@ -49,7 +51,9 @@ namespace TodoList
             return 0;
         }
 
-        // Overwrites old value
+
+        // Saves new value of maxId.
+        // Overwrites old value of MaxId.txt
         // If File does not exist it creates a new one 
         public void WriteMaxId(int maxId)
         {
@@ -58,6 +62,8 @@ namespace TodoList
         }
 
 
+        // Saves the Taskdata to TaskJson.data by serializing the List to json
+        // Overwrites old value
         public void SaveTasksToFile(List<ProjectTask> tasks)
         {
             var path = DataFilePath;
@@ -65,6 +71,8 @@ namespace TodoList
             File.WriteAllText(path, json);
         }
 
+
+        // Reads the json-data and recreates the List with help-class JsonFileReader
         public List<ProjectTask> ReadTasksFromFile()
         {
             var path = DataFilePath;

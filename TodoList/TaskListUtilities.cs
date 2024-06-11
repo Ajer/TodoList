@@ -485,22 +485,22 @@ namespace TodoList
 
 
 
-        public string ReadSearchTask()
-        {
-            string? s = "";
-            string str = "";
-            while (true)
-            {
-                Console.Write("Enter a product to search for: ");
-                s = Console.ReadLine();
-                str = s.Trim().ToLower();
-                if (!string.IsNullOrEmpty(s) || str.Equals("q"))
-                {
-                    break;
-                }
-            }
-            return str;
-        }
+        //public string ReadSearchTask()
+        //{
+        //    string? s = "";
+        //    string str = "";
+        //    while (true)
+        //    {
+        //        Console.Write("Enter a product to search for: ");
+        //        s = Console.ReadLine();
+        //        str = s.Trim().ToLower();
+        //        if (!string.IsNullOrEmpty(s) || str.Equals("q"))
+        //        {
+        //            break;
+        //        }
+        //    }
+        //    return str;
+        //}
 
 
 
@@ -543,7 +543,7 @@ namespace TodoList
             bool srch = (search != "") ? true : false;
             bool found = false;
 
-            ListHeader(sort);
+            ListHeader(sort);        // show the sort-method by quotation-mark
 
             if (srch)
             {
@@ -605,8 +605,11 @@ namespace TodoList
             Console.WriteLine("---------------------------------------------");
         }
     }
+
+
     public class JsonFileReader
     {
+        // Returns class T , for instance the list T =  List<ProjectTask>
         public static T Read<T>(string filePath)
         {
             string text = File.ReadAllText(filePath);
