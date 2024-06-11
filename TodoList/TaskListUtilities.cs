@@ -607,13 +607,13 @@ namespace TodoList
     }
 
 
-    public class JsonFileReader
-    {
-        // Returns class T , for instance the list T =  List<ProjectTask>
-        public static T Read<T>(string filePath)
-        {
-            string text = File.ReadAllText(filePath);
-            return JsonSerializer.Deserialize<T>(text);
-        }
-    }
+    //public class JsonFileReader
+    //{
+    //    // Returns class T , for instance the list T =  List<ProjectTask>
+    //    public static T Read<T>(string filePath)
+    //    {
+    //        string text = File.ReadAllText(filePath);
+    //        return JsonSerializer.Deserialize<T>(text);
+    //    }
+    //}
 }

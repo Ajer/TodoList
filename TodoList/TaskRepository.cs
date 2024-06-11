@@ -80,4 +80,15 @@ namespace TodoList
             return item;
         }
     }
+
+    public class JsonFileReader
+    {
+        // Returns list T =  List<ProjectTask>
+        // after deserializing the json-objects in the text-file
+        public static T Read<T>(string filePath)
+        {
+            string text = File.ReadAllText(filePath);
+            return JsonSerializer.Deserialize<T>(text);
+        }
+    }
 }
