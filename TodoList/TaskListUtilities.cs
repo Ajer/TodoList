@@ -54,8 +54,8 @@ namespace TodoList
 
         public void WriteHeader(List<ProjectTask> tasks)
         {
-            int done = tasks.FindAll(item => item.Status == TaskStatus.Done).Count();
-            int notDone = tasks.Count - done;  // "notstarted" and "started"
+            int done = tasks.FindAll(item => item.Status == TaskStatus.Done).Count();  // done
+            int notDone = tasks.Count - done;   // "notstarted" and "started"
 
             string nd_tsk = (notDone != 1) ? "tasks" : "task";
             string d_tsk = (done != 1) ? "tasks" : "task";
@@ -527,16 +527,33 @@ namespace TodoList
 
             ListHeader(sort);        // show the sort-method by quotation-mark
 
+            int cmpTime = 10;    //  days
             foreach (var task in sorted) // Show List
             {
-                 string dt = task.DueDate.ToString("yyyy-MM-dd");
-                 string status = (task.Status == TaskStatus.NotStarted) ? "Not Started" : task.Status.ToString();
+                string dt = task.DueDate.ToString("yyyy-MM-dd");
+                string status = (task.Status == TaskStatus.NotStarted) ? "Not Started" : task.Status.ToString();
 
-                 Console.WriteLine(task.Id.ToString().PadRight(7) + task.TaskTitle.PadRight(25) + task.Project.Name.PadRight(23) + status.PadRight(15) + dt);
+                int t1 = GetTimeSpanInDays(task.DueDate);
+                
+                if (t1 <= 10 && t1>=0)   // tasks within 10 days of duedate (incl duedate) become red. 
+                {                           // Older tasks remain white
+
+                    Console.ForegroundColor = ConsoleColor.Red;
+                }
+
+                Console.WriteLine(task.Id.ToString().PadRight(7) + task.TaskTitle.PadRight(25) + task.Project.Name.PadRight(23) + status.PadRight(15) + dt);
+     
+                Console.ResetColor();
             }
             
             Console.WriteLine();
             Console.WriteLine("---------------------------------------------");
+        }
+
+        private int GetTimeSpanInDays(DateTime dt)
+        {
+            TimeSpan ts = dt - DateTime.Now;
+            return ts.Days;
         }
     }
 }
