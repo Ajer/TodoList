@@ -57,8 +57,12 @@ namespace TodoList
             int done = tasks.FindAll(item => item.Status == TaskStatus.Done).Count();
             int notDone = tasks.Count - done;  // "notstarted" and "started"
 
+            string nd_tsk = (notDone != 1) ? "tasks" : "task";
+            string d_tsk = (done != 1) ? "tasks" : "task";
+
+
             Console.WriteLine();
-            Console.WriteLine("Welcome to Todoly you have " + notDone.ToString() + " tasks todo and " + done.ToString() + " tasks are done.");
+            Console.WriteLine("Welcome to Todoly you have " + notDone.ToString() + " " + nd_tsk + " todo and " + done.ToString() + " " + d_tsk+ " are done.");
             Console.WriteLine("Pick an option:");
         }
 
@@ -67,7 +71,7 @@ namespace TodoList
         public void WriteMenu()
         {
             Console.WriteLine();
-            Console.WriteLine("(1) Show task List (by date, by project or by title)");
+            Console.WriteLine("(1) Show task List (by date, by project, by title or by status)");
             Console.WriteLine("(2) Add New Task");
             Console.WriteLine("(3) Edit Task (update, mark as done, remove)");
             Console.WriteLine("(4) Save and Quit");
@@ -485,25 +489,6 @@ namespace TodoList
 
 
 
-        //public string ReadSearchTask()
-        //{
-        //    string? s = "";
-        //    string str = "";
-        //    while (true)
-        //    {
-        //        Console.Write("Enter a product to search for: ");
-        //        s = Console.ReadLine();
-        //        str = s.Trim().ToLower();
-        //        if (!string.IsNullOrEmpty(s) || str.Equals("q"))
-        //        {
-        //            break;
-        //        }
-        //    }
-        //    return str;
-        //}
-
-
-
         private void ListHeader(string sort)
         {
             string taskString = "Task";
@@ -535,85 +520,23 @@ namespace TodoList
 
 
 
-        public void PrintAllTasks(List<ProjectTask> tasks, string sort, string search = "")
+        public void PrintAllTasks(List<ProjectTask> tasks, string sort)
         {
 
             List<ProjectTask> sorted = GetSortedTasks(tasks, sort);
 
-            bool srch = (search != "") ? true : false;
-            bool found = false;
-
             ListHeader(sort);        // show the sort-method by quotation-mark
 
-            if (srch)
+            foreach (var task in sorted) // Show List
             {
+                 string dt = task.DueDate.ToString("yyyy-MM-dd");
+                 string status = (task.Status == TaskStatus.NotStarted) ? "Not Started" : task.Status.ToString();
 
-                //FirstOrDefault() returns the default value of the Data Type used if nothing is found,
-                //in case of Reference type like classes or objects it is NULL.
-
-                //ProjectTask? searchP = sorted.FirstOrDefault(item => item.TaskTitle.ToLower().Equals(search));
-                //if (searchP != null)     // searched for task found
-                //{
-                //    found = true;
-                //}
-                //else
-                //{
-                //    found = false;
-                //}
+                 Console.WriteLine(task.Id.ToString().PadRight(7) + task.TaskTitle.PadRight(25) + task.Project.Name.PadRight(23) + status.PadRight(15) + dt);
             }
-
-            if (srch && found)
-            {
-
-                //foreach (var prod in defaultSorted)
-                //{
-
-                //    if (prod.ProductName.ToLower().Equals(search))
-                //    {
-                //        Console.ForegroundColor = ConsoleColor.DarkMagenta;
-                //        Console.WriteLine(prod.Category.PadRight(20) + prod.ProductName.PadRight(20) + prod.Price);
-                //        Console.ResetColor();
-                //    }
-                //    else
-                //    {
-                //        Console.WriteLine(prod.Category.PadRight(20) + prod.ProductName.PadRight(20) + prod.Price);
-                //    }
-                //}
-            }
-            else if (srch && !found)
-            {
-                //Console.WriteLine("The Item was not found");
-
-                //foreach (var prod in defaultSorted) // Show List
-                //{
-                //    Console.WriteLine(prod.Category.PadRight(20) + prod.ProductName.PadRight(20) + prod.Price);
-                //}
-
-            }
-            else   // normal-display of List  (without search)
-            {
-
-                foreach (var task in sorted) // Show List
-                {
-                    string dt = task.DueDate.ToString("yyyy-MM-dd");
-                    string status = (task.Status == TaskStatus.NotStarted) ? "Not Started" : task.Status.ToString();
-
-                    Console.WriteLine(task.Id.ToString().PadRight(7) + task.TaskTitle.PadRight(25) + task.Project.Name.PadRight(23) + status.PadRight(15) + dt);
-                }
-            }
+            
             Console.WriteLine();
             Console.WriteLine("---------------------------------------------");
         }
     }
-
-
-    //public class JsonFileReader
-    //{
-    //    // Returns class T , for instance the list T =  List<ProjectTask>
-    //    public static T Read<T>(string filePath)
-    //    {
-    //        string text = File.ReadAllText(filePath);
-    //        return JsonSerializer.Deserialize<T>(text);
-    //    }
-    //}
 }
