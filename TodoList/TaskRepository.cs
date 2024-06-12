@@ -55,15 +55,23 @@ namespace TodoList
         // Saves new value of maxId.
         // Overwrites old value of MaxId.txt
         // If File does not exist it creates a new one 
-        public void WriteMaxId(int maxId)
+        public bool WriteMaxId(int maxId)
         {
-            var path = MaxIdPath;
-            File.WriteAllText(path, maxId.ToString());            
+            try
+            {
+                var path = MaxIdPath;
+                File.WriteAllText(path, maxId.ToString());
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }                     
         }
 
 
-        // Saves the Taskdata to TaskJson.data by serializing the List to json and overwrites old list. 
-        // If saving ok : returns true , if not returns false
+        // Saves the Taskdata to TaskJson.data by serializing the List to json. 
+        // If saving ok : returns true , if not returns false . Whole txt-file will be re-written.
         public bool SaveTasksToFile(List<ProjectTask> tasks)
         {
             try
@@ -80,7 +88,7 @@ namespace TodoList
         }
 
 
-        // Reads the json-data and recreates the List with help-class JsonFileReader
+        // Reads the json-data and recreates the List with JsonFileReader.Read
         public List<ProjectTask> ReadTasksFromFile()
         {
             var path = DataFilePath;
@@ -91,7 +99,7 @@ namespace TodoList
 
     public class JsonFileReader
     {
-        // Returns list T =  List<ProjectTask>
+        // Returns list with type T =  List<ProjectTask>
         // after deserializing the json-objects in the text-file
         public static T Read<T>(string filePath)
         {

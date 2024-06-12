@@ -161,7 +161,7 @@ namespace TodoList
 
             while (!dataEditParameterOk)
             {
-                dataEditParameter = ReadDataFromUser("Do you want to edit Due Date 'dd' , project 'p' , Title 't' or Status 's' ");
+                dataEditParameter = ReadDataFromUser("Do you want to edit Due Date 'dd' , Project 'p' , Title 't' or Status 's' ");
                 dataEditParameter = dataEditParameter.ToLower();
 
                 if (dataEditParameter == "dd" || dataEditParameter == "p" || dataEditParameter == "t" || dataEditParameter == "s" || dataEditParameter == "q")
@@ -196,12 +196,35 @@ namespace TodoList
                     }
                     else if (dataEditParameter == "p")
                     {
-                        string projName = ReadDataFromUser("Give a new value for projectname");
-                        pT.Project.Name = projName;
+                        string projName = "";
+                        bool projNameOk = false;
+
+                        while (!projNameOk)
+                        {
+                            projName = ReadDataFromUser("Give a new value for projectName");
+                            if (projName!="")
+                            {
+                                projNameOk = true;
+                            }
+                        }
+
+                        pT.Project.Name = projName;  // we have a non-blank-value
                     }
                     else if (dataEditParameter == "t")
                     {
-                        string taskTitle = ReadDataFromUser("Give a new value for taskTitle");
+
+                        string taskTitle = "";
+                        bool taskTitleOk = false;
+
+                        while (!taskTitleOk)
+                        {
+                            taskTitle = ReadDataFromUser("Give a new value for taskTitle");
+                            if (taskTitle!= "")
+                            {
+                                taskTitleOk = true;
+                            }
+                        }
+
                         pT.TaskTitle = taskTitle;
                     }
                     else   // "s"
@@ -338,10 +361,10 @@ namespace TodoList
 
                     //write to file
                     bool okSttf = TaskRepository.SaveTasksToFile(tasks); // "AutoSave" when change of Task-List is made
-                    TaskRepository.WriteMaxId(mId);    // Also update record of maxId on file since we added task. (we dont wanna reuse id's)
+                    bool okWmi = TaskRepository.WriteMaxId(mId);    // Also update record of maxId on file since we added task. (we dont wanna reuse id's)
 
 
-                    if (okSttf)
+                    if (okSttf && okWmi)
                     {
                         SuccessMessage("added");
                     }
