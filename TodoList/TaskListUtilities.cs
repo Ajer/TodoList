@@ -24,7 +24,6 @@ namespace TodoList
         //public List<Project> Projects { get; set; }
 
 
-
         public TaskListUtilities(TaskRepository tr)
         {
             //Projects = new List<Project>();
@@ -33,9 +32,11 @@ namespace TodoList
         }
 
 
-        public string ReadDataFromUser(string userAction)
+        // HelpClass which let the user input an answer-string to a question
+        // The answer-string is returned
+        private string ReadDataFromUser(string userAction)
         {
-            Console.Write(userAction + ": ");    //exempel  userAction = "Enter a Category"
+            Console.Write(userAction + ": ");    //exempel  userAction = "Enter a ProjectName"
             string? data = Console.ReadLine();
 
             if (data != null)
@@ -52,6 +53,8 @@ namespace TodoList
             return "";
         }
 
+
+        // Writes the Welcome-note when the program starts
         public void WriteHeader(List<ProjectTask> tasks)
         {
             int done = tasks.FindAll(item => item.Status == TaskStatus.Done).Count();  // done
@@ -67,7 +70,7 @@ namespace TodoList
         }
 
 
-
+        // Writes the 4 main choices for the user
         public void WriteMenu()
         {
             Console.WriteLine();
@@ -87,13 +90,16 @@ namespace TodoList
             Console.WriteLine("-----------------------------------------");
         }
 
-
-        public void AddTask(List<ProjectTask> tasks, ref int mId)
+        private void FailMessage(string msg)
         {
-            ReadAllDataForAddTask(tasks, ref mId);
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Something went wrong when " + msg + " a task. Contact dev if problem persist");   // msg= "" / "edited" etc
+            Console.ResetColor();
+            Console.WriteLine("-----------------------------------------");
         }
 
-
+        // Lets the user decide if he wants to goahead with the removal of a Task with a certain id
+        // If 'Y/y': goes ahead with removal . if 'A/a' or 'Q/q': the process is aborted  
         private void RemoveTask(List<ProjectTask> tasks, int id)
         {
             bool dataDeleteOk = false;
@@ -122,17 +128,22 @@ namespace TodoList
                     if (ok)
                     {
                         TaskRepository.SaveTasksToFile(tasks);   // List has been changed. Save new List to file.
-                        SuccessMessage("removed");             // The maxId stays the same even if we have erased this id here
+                        SuccessMessage("removed");     // The maxId stays the same even if we have erased this id here. (Simulate DB)
+                    }
+                    else
+                    {
+                        FailMessage("removing");
                     }
                 }
                 catch (Exception e)
                 {
+                    FailMessage("removing");
                 }
             }
         }
 
 
-
+        // Lets the user decide what param to edit and then does the editing
         private void EditTask(List<ProjectTask> tasks, int id)
         {
 
@@ -230,16 +241,22 @@ namespace TodoList
         }
 
 
+        // Start method accessible from program-class for adding a new task.
+        public void AddTask(List<ProjectTask> tasks, ref int mId)
+        {
+            ReadAllDataForAddTask(tasks, ref mId);
+        }
+
 
 
         // Reads user input for a task: title, projectname, duedate
-        // status will be set to 'started'
-        public void ReadAllDataForAddTask(List<ProjectTask> tasks, ref int mId)
+        // Status will be set to 'NotStarted'
+        private void ReadAllDataForAddTask(List<ProjectTask> tasks, ref int mId)
         {
 
             string dataTitle = "";
             string dataProjName = "";
-            //string dataStatus = "";  // Behövs inte : sätt till "NotStarted"
+            //string dataStatus = "";      // Initiate to TaskStatus.NotStarted
             string dataDueDate = "";
 
 
@@ -311,6 +328,8 @@ namespace TodoList
         }
 
 
+         // Lets the user input the preferred sorting
+        // Returns the string associated with the particular sort: 'd' ,'p' ,'t','s'
         public string UserSortsList()
         {
             string dataSort = "";
@@ -334,7 +353,8 @@ namespace TodoList
         }
 
 
-        public void ChangeList(List<ProjectTask> tasks)
+        // Start method accessible from program-class for editing / deleting a task
+        public void ChangeTask(List<ProjectTask> tasks)
         {
 
             Console.WriteLine();
@@ -488,7 +508,7 @@ namespace TodoList
         }
 
 
-
+        // Writes the headers for the different task-params
         private void ListHeader(string sort)
         {
             string taskString = "Task";
@@ -535,8 +555,8 @@ namespace TodoList
 
                 int t1 = GetTimeSpanInDays(task.DueDate);
                 
-                if (t1 <= 10 && t1>=0)   // tasks within 10 days of duedate (incl duedate) become red. 
-                {                           // Older tasks remain white
+                if (t1 <= 10 && t1>=0)   // tasks within 10 days before duedate (incl duedate) become red. "Red window of dates" 
+                {                           // Older and Younger tasks remain white. 
 
                     Console.ForegroundColor = ConsoleColor.Red;
                 }

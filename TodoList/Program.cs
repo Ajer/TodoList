@@ -62,8 +62,8 @@ void Main()
         }
         else if (choice.Trim().ToLower() == "3")     // 3 - Edit Task (update, mark as done, remove)
         {
-            tu.PrintAllTasks(tasks, "p");
-            tu.ChangeList(tasks);
+            tu.PrintAllTasks(tasks, "d");  // p
+            tu.ChangeTask(tasks);
 
         }
         else if (choice.Trim().ToLower() == "4")     // 4 = Save and Quit

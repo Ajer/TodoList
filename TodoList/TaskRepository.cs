@@ -63,7 +63,7 @@ namespace TodoList
 
 
         // Saves the Taskdata to TaskJson.data by serializing the List to json
-        // Overwrites old value
+        // Overwrites old list
         public void SaveTasksToFile(List<ProjectTask> tasks)
         {
             var path = DataFilePath;
