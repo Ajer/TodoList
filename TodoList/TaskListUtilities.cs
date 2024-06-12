@@ -82,7 +82,7 @@ namespace TodoList
 
 
 
-        private void SuccessMessage(string action)
+        public void SuccessMessage(string action)
         {
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("The Task was successfully " + action);   // action= "added" / "edited" etc
@@ -90,10 +90,10 @@ namespace TodoList
             Console.WriteLine("-----------------------------------------");
         }
 
-        private void FailMessage(string msg)
+        public void FailMessage(string msg)
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("Something went wrong when " + msg + " a task. Contact dev if problem persist");   // msg= "" / "edited" etc
+            Console.WriteLine("Something went wrong when " + msg + ". Contact dev if problem persist");   // msg= "" / "edited" etc
             Console.ResetColor();
             Console.WriteLine("-----------------------------------------");
         }
@@ -127,17 +127,24 @@ namespace TodoList
                     bool ok = tasks.Remove(pT);
                     if (ok)
                     {
-                        TaskRepository.SaveTasksToFile(tasks);   // List has been changed. Save new List to file.
-                        SuccessMessage("removed");     // The maxId stays the same even if we have erased this id here. (Simulate DB)
+                        bool ok2 = TaskRepository.SaveTasksToFile(tasks);   // List has been changed. Save new List to file.
+                        if (ok2)
+                        {
+                            SuccessMessage("removed");     // The maxId stays the same even if we have erased this id here. (Simulate DB)                   
+                        }
+                        else
+                        {
+                            FailMessage("removing a task");
+                        }
                     }
                     else
                     {
-                        FailMessage("removing");
+                        FailMessage("removing a task");
                     }
                 }
                 catch (Exception e)
                 {
-                    FailMessage("removing");
+                    FailMessage("removing a task");
                 }
             }
         }
@@ -227,13 +234,20 @@ namespace TodoList
                     }
 
                     // write to file
-                    TaskRepository.SaveTasksToFile(tasks);   // List has been changed. Save new List to file.
-                    SuccessMessage("edited");
+                    bool ok = TaskRepository.SaveTasksToFile(tasks);   // List has been changed. Save new List to file.
+                    if (ok)
+                    {
+                        SuccessMessage("edited");
+                    }
+                    else
+                    {
+                        FailMessage("editing a task");
+                    }
                 }
                 catch (Exception e)
                 {
-
-                    Console.WriteLine("Something went wrong when editing tasks." + e.Message);
+                    FailMessage("editing a task");
+                    Console.WriteLine(e.Message);
                 }
 
             }
@@ -317,13 +331,30 @@ namespace TodoList
                 mId = mId + 1;    // create new Id for task
                 ProjectTask t = new ProjectTask(mId, dataTitle, project, TaskStatus.NotStarted, dueDt);
 
-                tasks.Add(t);
+               
+                try
+                {
+                    tasks.Add(t);
 
-                //write to file
-                TaskRepository.SaveTasksToFile(tasks); // "AutoSave" when change of Task-List is made
-                TaskRepository.WriteMaxId(mId);    // Also update record of maxId on file since we dont wanna reuse id's
+                    //write to file
+                    bool okSttf = TaskRepository.SaveTasksToFile(tasks); // "AutoSave" when change of Task-List is made
+                    TaskRepository.WriteMaxId(mId);    // Also update record of maxId on file since we added task. (we dont wanna reuse id's)
 
-                SuccessMessage("added");
+
+                    if (okSttf)
+                    {
+                        SuccessMessage("added");
+                    }
+                    else
+                    {
+                        FailMessage("adding a task");
+                    }
+                }
+                catch (Exception e)
+                {
+                    FailMessage("adding a task");
+                    Console.WriteLine(e.Message);
+                }               
             }
         }
 

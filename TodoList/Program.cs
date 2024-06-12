@@ -6,7 +6,7 @@ void Main()
 {
 
     TaskRepository tr = new TaskRepository();
-   
+    
     List<ProjectTask> tasks;
 
     int maxId;
@@ -24,7 +24,7 @@ void Main()
             Environment.Exit(0);
         }
 
-        maxId = tr.ReadMaxId();  // Read maxId.txt
+        maxId = tr.ReadMaxId();   // Read maxId.txt . The maxId should be equal or bigger than the highest id in TaskJson.data
     }
     else
     {
@@ -68,9 +68,22 @@ void Main()
         }
         else if (choice.Trim().ToLower() == "4")     // 4 = Save and Quit
         {
-            tr.SaveTasksToFile(tasks);
+            try
+            { 
+                bool ok = tr.SaveTasksToFile(tasks);
 
-            break;
+                if (!ok)
+                {
+                    tu.FailMessage("Saving and Closing the program");
+                    Console.WriteLine("Please check MaxId.txt and TaskJson.data");
+                }
+                break;
+            }
+            catch (Exception)
+            {
+                tu.FailMessage("Saving and Closing the program");
+                Console.WriteLine("Please check MaxId.txt and TaskJson.data");
+            }          
         }
     }
 }
