@@ -71,22 +71,24 @@ void Main()
         }
         else if (choice.Trim().ToLower() == "4")     // 4 = Save and Quit
         {
-            try
-            { 
-                bool ok = tr.SaveTasksToFile(tasks);
+            //try
+            //{ 
+            //    bool ok = tr.SaveTasksToFile(tasks);
 
-                if (!ok)
-                {
-                    tu.FailMessage("Saving and Closing the program");
-                    Console.WriteLine("Please check MaxId.txt and TaskJson.data");
-                }
-                break;
-            }
-            catch (Exception)
-            {
-                tu.FailMessage("Saving and Closing the program");
-                Console.WriteLine("Please check MaxId.txt and TaskJson.data");
-            }          
+            //    if (!ok)
+            //    {
+            //        tu.FailMessage("Saving and Closing the program");
+            //        Console.WriteLine("Please check MaxId.txt and TaskJson.data");
+            //    }
+            //    break;
+            //}
+            //catch (Exception)
+            //{
+            //    tu.FailMessage("Saving and Closing the program");
+            //    Console.WriteLine("Please check MaxId.txt and TaskJson.data");
+            //}
+
+            break;
         }
     }
 }
