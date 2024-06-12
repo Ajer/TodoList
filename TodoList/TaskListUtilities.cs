@@ -63,21 +63,25 @@ namespace TodoList
             string nd_tsk = (notDone != 1) ? "tasks" : "task";
             string d_tsk = (done != 1) ? "tasks" : "task";
 
-
             Console.WriteLine();
             Console.WriteLine("Welcome to Todoly you have " + notDone.ToString() + " " + nd_tsk + " todo and " + done.ToString() + " " + d_tsk+ " are done.");
             Console.WriteLine("Pick an option:");
+
         }
 
 
         // Writes the 4 main choices for the user
         public void WriteMenu()
         {
+            Console.ForegroundColor = ConsoleColor.Cyan;
+           
             Console.WriteLine();
             Console.WriteLine("(1) Show task List (by date, by project, by title or by status)");
             Console.WriteLine("(2) Add New Task");
             Console.WriteLine("(3) Edit Task (update, mark as done, remove)");
             Console.WriteLine("(4) Save and Quit");
+
+            Console.ResetColor();
         }
 
 
@@ -109,7 +113,7 @@ namespace TodoList
 
             while (!dataDeleteOk)
             {
-                dataDelete = ReadDataFromUser("Are You sure you want to delete the task with id = " + id + "? Yes 'Y'/'y' . Abort 'A'/'a'");
+                dataDelete = ReadDataFromUser("Are You sure you want to Delete the task with id = " + id + "?  YES 'Y'/'y' .ABORT 'A'/'a'");
                 dataDelete = dataDelete.ToLower();
 
                 if (dataDelete == "y" || dataDelete == "a" || dataDelete == "q")
@@ -391,11 +395,12 @@ namespace TodoList
 
             Console.WriteLine();
             Console.WriteLine("Write q to quit");
+            Console.WriteLine();
 
             while (!dataSortOk)
             {
-                dataSort = ReadDataFromUser("Write 'd' to show/sort Tasks by Date ,'p' by Project, " +
-                  "'t' by title and 's' by status");
+                dataSort = ReadDataFromUser("Write 'd' to sort by Date ,'p' by Project, " +
+                  "'t' by Tasktitle or 's' by Status");
                 dataSort = dataSort.ToLower();
 
                 if (dataSort == "d" || dataSort == "p" || dataSort == "t" || dataSort == "s" || dataSort == "q")
@@ -423,6 +428,7 @@ namespace TodoList
 
                 while (!dataIdOk)
                 {
+                    Console.WriteLine();
                     Console.WriteLine("Write q to quit");
                     dataId = ReadDataFromUser("Write the Id-number for the task you want to change");
                     dataId = dataId.ToLower();
@@ -561,6 +567,13 @@ namespace TodoList
             }
         }
 
+        public void UserChoiceHeader(string choice)
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine();
+            Console.WriteLine(choice);
+            Console.ResetColor();
+        }
 
         // Writes the headers for the different task-params
         private void ListHeader(string sort)
@@ -607,13 +620,18 @@ namespace TodoList
                 string dt = task.DueDate.ToString("yyyy-MM-dd");
                 string status = (task.Status == TaskStatus.NotStarted) ? "Not Started" : task.Status.ToString();
 
-                int t1 = GetTimeSpanInDays(task.DueDate);
-                
-                if (t1 <= 10 && t1>=0)   // tasks within 10 days before duedate (incl duedate) become red. "Red window of dates" 
-                {                           // Older and Younger tasks remain white. 
+                //int t1 = GetTimeSpanInDays(task.DueDate);
 
-                    Console.ForegroundColor = ConsoleColor.Red;
+                //if (t1 <= 10 && t1 >= 0)   // tasks within 10 days before duedate (incl duedate) become red. "Red window of dates" 
+                //{                           // Older and Younger tasks remain white. 
+                //    Console.ForegroundColor = ConsoleColor.Red;
+                //}
+
+                if (task.Status == TaskStatus.Done)
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
                 }
+
 
                 Console.WriteLine(task.Id.ToString().PadRight(7) + task.TaskTitle.PadRight(25) + task.Project.Name.PadRight(23) + status.PadRight(15) + dt);
      
@@ -624,10 +642,10 @@ namespace TodoList
             Console.WriteLine("---------------------------------------------");
         }
 
-        private int GetTimeSpanInDays(DateTime dt)
-        {
-            TimeSpan ts = dt - DateTime.Now;
-            return ts.Days;
-        }
+        //private int GetTimeSpanInDays(DateTime dt)
+        //{
+        //    TimeSpan ts = dt - DateTime.Now;
+        //    return ts.Days;
+        //}
     }
 }

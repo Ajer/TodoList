@@ -48,20 +48,23 @@ void Main()
 
         if (choice.Trim().ToLower() == "1")       // 1 - Show List by Sort
         {
+            tu.UserChoiceHeader("Show List Of Tasks:");
             string sort = tu.UserSortsList();
             if (sort!="q")
             {
+                
                 tu.PrintAllTasks(tasks,sort);
             }            
         }
         else if (choice.Trim().ToLower() == "2")    // 2 - Add new Task
-        {          
-
+        {
+            tu.UserChoiceHeader("Add a new Task:");
             tu.AddTask(tasks, ref maxId);   
 
         }
         else if (choice.Trim().ToLower() == "3")     // 3 - Edit Task (update, mark as done, remove)
         {
+            tu.UserChoiceHeader("Edit Task / Remove Task:");
             tu.PrintAllTasks(tasks, "d");  // p
             tu.ChangeTask(tasks);
 
