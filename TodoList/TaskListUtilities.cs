@@ -128,7 +128,7 @@ namespace TodoList
 
                 try
                 {
-                    ProjectTask pT = tasks.Find(item => item.Id == id);    //get task to remove. We know id exists here from ChangeLIst
+                    ProjectTask pT = tasks.Find(item => item.Id == id);    //get task to remove. We know id exists here from ChangeTask()
 
                     bool ok = tasks.Remove(pT);
                     if (ok)
@@ -198,7 +198,7 @@ namespace TodoList
                             }
                         }
                         DateTime dueDt = Convert.ToDateTime(dataDueDate);
-                        pT.DueDate = dueDt;
+                        pT.DueDate = dueDt;                       // edit attribute
 
                     }
                     else if (dataEditParameter == "p")
@@ -399,8 +399,8 @@ namespace TodoList
         }
 
 
-         // Lets the user input the preferred sorting
-        // Returns the string associated with the particular sort: 'd' ,'p' ,'t','s'
+        // Lets the user input the preferred sorting
+        // Returns the string associated with the particular sort: 'd' ,'p' ,'t','s' or 'q' (if user quits)
         public string UserSortsList()
         {
             string dataSort = "";
@@ -445,8 +445,7 @@ namespace TodoList
                 while (!dataIdOk)
                 {
                     Console.WriteLine();
-                    //Console.WriteLine("Write q to quit");
-
+             
                     QuitCue();
                    
                     dataId = ReadDataFromUser("Write the Id-number for the task you want to change");
@@ -455,11 +454,11 @@ namespace TodoList
                     if (dataId != "q")
                     {
 
-                        bool intOk = int.TryParse(dataId, out id);
+                        bool intOk = int.TryParse(dataId, out id);      // sends out int id if user entered an int
 
                         if (intOk)
                         {
-                            int index = tasks.FindIndex(item => item.Id == id);
+                            int index = tasks.FindIndex(item => item.Id == id);  // FindIndex Only used to check if id exists  
 
                             if (index >= 0)    // id exists
                             {
