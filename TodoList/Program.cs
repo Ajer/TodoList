@@ -16,7 +16,7 @@ void Main()
         try
         {
             tasks = tr.ReadTasksFromFile();    // Load task-data
-            maxId = tr.ReadMaxId(tasks);      // load maxId
+            maxId = tr.ReadMaxId(tasks);      // load maxId - The maxId should be equal or bigger than the highest id in TaskJson.data
         }
         catch (Exception e)
         {
@@ -25,7 +25,6 @@ void Main()
             Environment.Exit(0);
         }
 
-       // maxId = tr.ReadMaxId();   // Read maxId.txt . The maxId should be equal or bigger than the highest id in TaskJson.data
     }
     else
     {

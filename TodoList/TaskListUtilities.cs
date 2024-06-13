@@ -20,13 +20,11 @@ namespace TodoList
         public TaskRepository TaskRepository { get; set; }
 
 
-
         //public List<Project> Projects { get; set; }
 
 
         public TaskListUtilities(TaskRepository tr)
         {
-            //Projects = new List<Project>();
 
             TaskRepository = tr;
         }
@@ -115,7 +113,7 @@ namespace TodoList
 
             while (!dataDeleteOk)
             {
-                dataDelete = ReadDataFromUser("Are You sure you want to Delete the task with id = " + id + "?  YES 'Y'/'y' .ABORT 'A'/'a'");
+                dataDelete = ReadDataFromUser("Are You sure you want to Delete the task with id = " + id + "?  YES 'Y'/'y'. ABORT 'A'/'a'");
                 dataDelete = dataDelete.ToLower();
 
                 if (dataDelete == "y" || dataDelete == "a" || dataDelete == "q")
@@ -362,7 +360,7 @@ namespace TodoList
                 mId = mId + 1;    // create new Id for task
                 ProjectTask t = new ProjectTask(mId, dataTitle, project, TaskStatus.NotStarted, dueDt);
 
-               
+            
                 try
                 {
                     tasks.Add(t);
@@ -431,9 +429,7 @@ namespace TodoList
         // Start method accessible from program-class for editing / deleting a task
         public void ChangeTask(List<ProjectTask> tasks)
         {
-
             Console.WriteLine();
-
 
             while (true)
             {
@@ -546,11 +542,13 @@ namespace TodoList
             return tasks.OrderBy(item => item.TaskTitle).ToList();
         }
 
+
         // Sort by ascending ProjectName
         private List<ProjectTask> ProjectSort(List<ProjectTask> tasks)
         {
             return tasks.OrderBy(item => item.Project.Name).ToList();
         }
+
 
         // Sort by ascending date
         private List<ProjectTask> DateSort(List<ProjectTask> tasks)
@@ -558,11 +556,13 @@ namespace TodoList
             return tasks.OrderBy(item => item.DueDate).ToList();
         }
 
+
         // Sort by alphabetical status:  Done,NotStarted,Started
         private List<ProjectTask> StatusSort(List<ProjectTask> tasks)
         {
             return tasks.OrderBy(item => item.Status.ToString()).ToList();
         }
+
 
         // Help-Method to PrintAllTasks who returns the sort wanted 
         private List<ProjectTask> GetSortedTasks(List<ProjectTask> tasks, string sort)
