@@ -87,6 +87,7 @@ namespace TodoList
         public void SuccessMessage(string action)
         {
             Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine();
             Console.WriteLine("The Task was successfully " + action);   // action= "added" / "edited" etc
             Console.ResetColor();
             Console.WriteLine("-------------------------------------");

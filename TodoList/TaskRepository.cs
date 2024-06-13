@@ -10,9 +10,8 @@ namespace TodoList
     public class TaskRepository
     {
         public readonly string DataFilePath = @"..\..\..\TaskJson.data";
-
+        
         public readonly string MaxIdPath = @"..\..\..\MaxId.txt";
-
 
 
         // Read maxId from MaxId.txt text-file and return it.

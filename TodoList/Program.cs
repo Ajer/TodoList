@@ -11,7 +11,7 @@ void Main()
 
     int maxId = 0;
 
-    if (File.Exists(tr.DataFilePath))   // TaskJson.data exists
+    if (File.Exists(tr.DataFilePath))          // TaskJson.data exists
     {
         try
         {
@@ -28,7 +28,7 @@ void Main()
     }
     else
     {
-        tasks = new List<ProjectTask>();   // TaskJson.data does not exist yet. (Will be created when the first task is created).
+        tasks = new List<ProjectTask>();    // TaskJson.data does not exist yet. (Will be created when the first task is created).
         tr.WriteMaxId(0);   // Set maxId = 0 in MaxId.txt
         maxId = 0;
     }
