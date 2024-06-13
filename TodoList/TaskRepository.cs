@@ -14,16 +14,6 @@ namespace TodoList
         public readonly string MaxIdPath = @"..\..\..\MaxId.txt";
 
 
-        //public int GetMaxId(List<ProjectTask> tasks)
-        //{
-        //    if (tasks.Count > 0)
-        //    {
-        //        int mId = tasks.Max(item => item.Id);
-        //        return mId;
-        //    }
-        //    return 0;
-        //}
-
 
         // Read maxId from MaxId.txt text-file and return it.
         public int ReadMaxId(List<ProjectTask> tasks)

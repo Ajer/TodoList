@@ -38,13 +38,13 @@ void Main()
     TaskListUtilities tu = new TaskListUtilities(tr);
 
    
-    tu.WriteHeader(tasks);
+    tu.WriteWelcomeHeader(tasks);
 
     string choice = "";
     
     while(true)
     {
-        tu.WriteMenu();
+        tu.WriteMenu();       // 1-4 choices
         choice = Console.ReadLine();
 
         if (choice.Trim().ToLower() == "1")       // 1 - Show List by Sort
@@ -72,23 +72,7 @@ void Main()
         }
         else if (choice.Trim().ToLower() == "4")     // 4 = Quit  (All saved in TaskListUtilities)
         {
-            //try
-            //{ 
-            //    bool ok = tr.SaveTasksToFile(tasks);
-
-            //    if (!ok)
-            //    {
-            //        tu.FailMessage("Saving and Closing the program");
-            //        Console.WriteLine("Please check MaxId.txt and TaskJson.data");
-            //    }
-            //    break;
-            //}
-            //catch (Exception)
-            //{
-            //    tu.FailMessage("Saving and Closing the program");
-            //    Console.WriteLine("Please check MaxId.txt and TaskJson.data");
-            //}
-
+            
             break;
         }
     }

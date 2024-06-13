@@ -36,7 +36,7 @@ namespace TodoList
         // The answer-string is returned
         private string ReadDataFromUser(string userAction)
         {
-            Console.Write(userAction + ": ");    //exempel  userAction = "Enter a ProjectName"
+            Console.Write(userAction + ": ");    //example  userAction = "Enter a ProjectName"
             string? data = Console.ReadLine();
 
             if (data != null)
@@ -55,7 +55,7 @@ namespace TodoList
 
 
         // Writes the Welcome-note when the program starts
-        public void WriteHeader(List<ProjectTask> tasks)
+        public void WriteWelcomeHeader(List<ProjectTask> tasks)
         {
             int done = tasks.FindAll(item => item.Status == TaskStatus.Done).Count();  // done
             int notDone = tasks.Count - done;   // "notstarted" and "started"
