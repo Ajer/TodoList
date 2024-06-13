@@ -9,27 +9,28 @@ void Main()
     
     List<ProjectTask> tasks;
 
-    int maxId;
+    int maxId = 0;
 
     if (File.Exists(tr.DataFilePath))   // TaskJson.data exists
     {
         try
         {
-            tasks = tr.ReadTasksFromFile();  // Load values
+            tasks = tr.ReadTasksFromFile();    // Load task-data
+            maxId = tr.ReadMaxId(tasks);      // load maxId
         }
         catch (Exception e)
         {
             tasks = null;
-            Console.WriteLine("An error has ocurred while reading data from file: " + e.Message);
+            Console.WriteLine("An error has ocurred while reading data from file. Check both files for path and illegal characters. " + e.Message);
             Environment.Exit(0);
         }
 
-        maxId = tr.ReadMaxId();   // Read maxId.txt . The maxId should be equal or bigger than the highest id in TaskJson.data
+       // maxId = tr.ReadMaxId();   // Read maxId.txt . The maxId should be equal or bigger than the highest id in TaskJson.data
     }
     else
     {
-        tasks = new List<ProjectTask>();   // TaskJson.data does not exist yet
-        tr.WriteMaxId(0);   // create a txt-file with maxId = 0
+        tasks = new List<ProjectTask>();   // TaskJson.data does not exist yet. (Will be created when the first task is created).
+        tr.WriteMaxId(0);   // Set maxId = 0 in MaxId.txt
         maxId = 0;
     }
 
@@ -48,7 +49,7 @@ void Main()
 
         if (choice.Trim().ToLower() == "1")       // 1 - Show List by Sort
         {
-            tu.UserChoiceHeader("Show List Of Tasks:");
+            tu.UserChoiceHeader("Show List Of Tasks");
             string sort = tu.UserSortsList();
             if (sort!="q")
             {
@@ -58,18 +59,18 @@ void Main()
         }
         else if (choice.Trim().ToLower() == "2")    // 2 - Add new Task
         {
-            tu.UserChoiceHeader("Add a new Task:");
+            tu.UserChoiceHeader("Add a new Task");
             tu.AddTask(tasks, ref maxId);   
 
         }
         else if (choice.Trim().ToLower() == "3")     // 3 - Edit Task (update, mark as done, remove)
         {
-            tu.UserChoiceHeader("Edit Task / Remove Task:");
+            tu.UserChoiceHeader("Edit Task / Remove Task");
             tu.PrintAllTasks(tasks, "d");  // p
             tu.ChangeTask(tasks);
 
         }
-        else if (choice.Trim().ToLower() == "4")     // 4 = Save and Quit
+        else if (choice.Trim().ToLower() == "4")     // 4 = Quit  (All saved in TaskListUtilities)
         {
             //try
             //{ 

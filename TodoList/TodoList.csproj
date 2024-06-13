@@ -8,8 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Hidden\**" />
     <Compile Remove="Old_data_files\**" />
+    <EmbeddedResource Remove="Hidden\**" />
     <EmbeddedResource Remove="Old_data_files\**" />
+    <None Remove="Hidden\**" />
     <None Remove="Old_data_files\**" />
   </ItemGroup>
 

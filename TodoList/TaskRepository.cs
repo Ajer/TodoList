@@ -26,7 +26,7 @@ namespace TodoList
 
 
         // Read maxId from MaxId.txt text-file and return it.
-        public int ReadMaxId()
+        public int ReadMaxId(List<ProjectTask> tasks)
         {
             if (File.Exists(MaxIdPath))
             {
@@ -42,13 +42,32 @@ namespace TodoList
                     {
                         return res;
                     }
+                    else
+                    {
+                        Console.WriteLine("The MaxId file cannot be parsed as a number");
+                        return 0;             // There is a MaxId-file but the characters can't be parsed to a number 
+                    }
                 }
                 catch(Exception e)
                 {
+                    Console.WriteLine("Check The paths of the 2 files. Check files for illegal characters");
                     return 0;
                 }
             }
-            return 0;
+            else   // MaxId does not exist and needs to be recreated with a newvalue of maxid 
+            {
+                if (tasks.Count > 0)
+                {
+                    int m = tasks.Max(item => item.Id);
+                    WriteMaxId(m);
+                    return m;
+                }
+                else
+                {
+                    WriteMaxId(0);
+                    return 0;
+                }
+            }
         }
 
 

@@ -85,22 +85,24 @@ namespace TodoList
         }
 
 
-
+        // Message when an action is completed
         public void SuccessMessage(string action)
         {
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("The Task was successfully " + action);   // action= "added" / "edited" etc
             Console.ResetColor();
-            Console.WriteLine("-----------------------------------------");
+            Console.WriteLine("-------------------------------------");
         }
 
+        // Errorhandling message
         public void FailMessage(string msg)
         {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("Something went wrong when " + msg + ". Contact dev if problem persist");   // msg= "" / "edited" etc
             Console.ResetColor();
-            Console.WriteLine("-----------------------------------------");
+            Console.WriteLine("-------------------------------------");
         }
+
 
         // Lets the user decide if he wants to goahead with the removal of a Task with a certain id
         // If 'Y/y': goes ahead with removal . if 'A/a' or 'Q/q': the process is aborted  
@@ -149,6 +151,7 @@ namespace TodoList
                 catch (Exception e)
                 {
                     FailMessage("removing a task");
+                    Console.WriteLine(e.Message);
                 }
             }
         }
@@ -306,7 +309,8 @@ namespace TodoList
                 bool dataTitleOk = false;
 
                 Console.WriteLine();
-                Console.WriteLine("Write q to quit");
+                //Console.WriteLine("Write q to quit");
+                QuitCue();
 
                 while (!dataTitleOk)
                 {
@@ -386,6 +390,15 @@ namespace TodoList
         }
 
 
+        // Informs the user of the possibility to quit
+        private void QuitCue()
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("Write q to quit");
+            Console.ResetColor();
+        }
+
+
          // Lets the user input the preferred sorting
         // Returns the string associated with the particular sort: 'd' ,'p' ,'t','s'
         public string UserSortsList()
@@ -394,8 +407,11 @@ namespace TodoList
             bool dataSortOk = false;
 
             Console.WriteLine();
-            Console.WriteLine("Write q to quit");
-            Console.WriteLine();
+
+            //Console.WriteLine("Write q to quit");
+            QuitCue();
+
+            //Console.WriteLine();
 
             while (!dataSortOk)
             {
@@ -429,7 +445,10 @@ namespace TodoList
                 while (!dataIdOk)
                 {
                     Console.WriteLine();
-                    Console.WriteLine("Write q to quit");
+                    //Console.WriteLine("Write q to quit");
+
+                    QuitCue();
+                   
                     dataId = ReadDataFromUser("Write the Id-number for the task you want to change");
                     dataId = dataId.ToLower();
 
@@ -546,7 +565,7 @@ namespace TodoList
             return tasks.OrderBy(item => item.Status.ToString()).ToList();
         }
 
-
+        // Help-Method to PrintAllTasks who returns the sort wanted 
         private List<ProjectTask> GetSortedTasks(List<ProjectTask> tasks, string sort)
         {
             if (sort == "p")
@@ -567,13 +586,17 @@ namespace TodoList
             }
         }
 
+        // Writes the Header of the main-alternative 1-4
         public void UserChoiceHeader(string choice)
         {
-            Console.ForegroundColor = ConsoleColor.Yellow;
+            //Console.ForegroundColor = ConsoleColor.Yellow;
+
             Console.WriteLine();
             Console.WriteLine(choice);
-            Console.ResetColor();
+
+            //Console.ResetColor();
         }
+
 
         // Writes the headers for the different task-params
         private void ListHeader(string sort)
@@ -606,7 +629,7 @@ namespace TodoList
         }
 
 
-
+        // Prints the List according to the sort
         public void PrintAllTasks(List<ProjectTask> tasks, string sort)
         {
 
@@ -614,32 +637,40 @@ namespace TodoList
 
             ListHeader(sort);        // show the sort-method by quotation-mark
 
-            int cmpTime = 10;    //  days
-            foreach (var task in sorted) // Show List
+            if (tasks.Count() > 0)
             {
-                string dt = task.DueDate.ToString("yyyy-MM-dd");
-                string status = (task.Status == TaskStatus.NotStarted) ? "Not Started" : task.Status.ToString();
-
-                //int t1 = GetTimeSpanInDays(task.DueDate);
-
-                //if (t1 <= 10 && t1 >= 0)   // tasks within 10 days before duedate (incl duedate) become red. "Red window of dates" 
-                //{                           // Older and Younger tasks remain white. 
-                //    Console.ForegroundColor = ConsoleColor.Red;
-                //}
-
-                if (task.Status == TaskStatus.Done)
+                int cmpTime = 10;    //  days
+                foreach (var task in sorted) // Show List
                 {
-                    Console.ForegroundColor = ConsoleColor.Green;
+                    string dt = task.DueDate.ToString("yyyy-MM-dd");
+                    string status = (task.Status == TaskStatus.NotStarted) ? "Not Started" : task.Status.ToString();
+
+                    //int t1 = GetTimeSpanInDays(task.DueDate);
+
+                    //if (t1 <= 10 && t1 >= 0)   // tasks within 10 days before duedate (incl duedate) become red. "Red window of dates" 
+                    //{                           // Older and Younger tasks remain white. 
+                    //    Console.ForegroundColor = ConsoleColor.Red;
+                    //}
+
+                    if (task.Status == TaskStatus.Done)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                    }
+
+
+                    Console.WriteLine(task.Id.ToString().PadRight(7) + task.TaskTitle.PadRight(25) + task.Project.Name.PadRight(23) + status.PadRight(15) + dt);
+
+                    Console.ResetColor();
                 }
-
-
-                Console.WriteLine(task.Id.ToString().PadRight(7) + task.TaskTitle.PadRight(25) + task.Project.Name.PadRight(23) + status.PadRight(15) + dt);
-     
-                Console.ResetColor();
+            }
+            else
+            {
+                Console.WriteLine();
+                Console.WriteLine(" No items here yet");
             }
             
             Console.WriteLine();
-            Console.WriteLine("---------------------------------------------");
+            Console.WriteLine("---------------------------------------------------------------------------------");
         }
 
         //private int GetTimeSpanInDays(DateTime dt)
