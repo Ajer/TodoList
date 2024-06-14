@@ -1,5 +1,5 @@
 Simple C# Console Project which lets a user keep track of different tasks. Every task can be assigned to a project,
-tasks can be edited , removed and showed in a list sorted by different values.
+can be edited , removed and showed in a list sorted by different values.
 
 It uses 2 text-files:
 
