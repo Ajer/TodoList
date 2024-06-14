@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace TodoList
 {
+    // Responsible for all methods concerning read and write data to and from textfiles
     public class TaskRepository
     {
-        public readonly string DataFilePath = @"..\..\..\TaskJson.data";
-        
+        public readonly string DataFilePath = @"..\..\..\TaskJson.data";        
         public readonly string MaxIdPath = @"..\..\..\MaxId.txt";
 
 

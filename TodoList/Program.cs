@@ -6,7 +6,6 @@ void Main()
 {
 
     TaskRepository tr = new TaskRepository();
-    
     List<ProjectTask> tasks;
 
     int maxId = 0;
@@ -69,7 +68,7 @@ void Main()
             tu.ChangeTask(tasks);
 
         }
-        else if (choice.Trim().ToLower() == "4")     // 4 = Quit  (All saved in TaskListUtilities)
+        else if (choice.Trim().ToLower() == "4")     // 4 = Quit  (Everything already saved in TaskListUtilities)
         {
             
             break;
